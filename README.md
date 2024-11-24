@@ -30,8 +30,11 @@
    ```sh
    git clone https://github.com/mzyy1001/AI_AB_test.git
    ```
-
-
+2. **依赖版本**
+   ```sh
+      >node -v
+      v22.11.0
+   ```
 ## 贡献
 欢迎提交 Issue 和 Pull Request，共同完善项目。
 

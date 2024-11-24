@@ -1,0 +1,18 @@
+{
+  "name": "xv",
+  "version": "1.0.0",
+  "description": "通过万亿参智能体数字人建模市场消费人群群像，精准描画用户行为，实现可解释的、针对性的、图灵完备的AB测试。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.15.0"
+  }
+}
