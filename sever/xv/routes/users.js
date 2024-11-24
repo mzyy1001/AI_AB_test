@@ -1,8 +1,10 @@
+require('dotenv').config();
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const db = require('../app'); // SQLite
+const db = require('../database/db');  
 const router = express.Router();
 const nodemailer = require('nodemailer');
 
@@ -18,8 +20,6 @@ router.post('/register', (req, res) => {
       return res.status(400).json({ email: 'Email already exists' });
     } else {
       bcrypt.genSalt(10, (err, salt) => {
-        if (err) throw err;
-
         bcrypt.hash(password, salt, (err, hash) => {
           if (err) throw err;
 
@@ -59,7 +59,7 @@ router.post('/login', (req, res) => {
 
         jwt.sign(
           payload,
-          'your_jwt_secret',
+          process.env.JWT_SECRET,
           { expiresIn: 3600 },
           (err, token) => {
             if (err) throw err;
@@ -119,7 +119,7 @@ router.post('/forgotPassword', (req, res) => {
       return res.status(404).json({ email: 'User not found' });
     }
 
-    const resetToken = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     // Create reset URL
     const resetURL = `http://localhost:5000/resetPassword/${resetToken}`;
@@ -154,7 +154,7 @@ router.post('/resetPassword/:token', (req, res) => {
   const { newPassword } = req.body;
 
   // Verify reset token
-  jwt.verify(token, 'your_jwt_secret', (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(400).json({ error: 'Invalid or expired token' });
     }
