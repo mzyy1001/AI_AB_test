@@ -25,4 +25,31 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
   }
 });
 
+db.run(`CREATE TABLE IF NOT EXISTS files (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  filename TEXT,
+  filepath TEXT,
+  mimetype TEXT,
+  size INTEGER,
+  uploadDate TEXT DEFAULT (datetime('now'))
+)`, (err) => {
+  if (err) {
+      console.error('Failed to create files table:', err.message);
+  } else {
+      console.log('Files table ready');
+  }
+});
+
+db.run(`CREATE TABLE IF NOT EXISTS urls (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  url TEXT UNIQUE,
+  submitDate TEXT DEFAULT (datetime('now'))
+)`, (err) => {
+  if (err) {
+      console.error('Failed to create urls table:', err.message);
+  } else {
+      console.log('URLs table ready');
+  }
+});
+
 module.exports = db;
