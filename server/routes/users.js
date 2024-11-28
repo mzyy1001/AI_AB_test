@@ -8,9 +8,9 @@ const db = require('../database/db');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 
+
 router.post('/register', (req, res) => {
   const { email, password, name } = req.body;
-
   db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
