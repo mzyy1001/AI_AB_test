@@ -52,4 +52,32 @@ db.run(`CREATE TABLE IF NOT EXISTS urls (
   }
 });
 
+db.serialize(() => {
+  // Add 'status' and 'reportPath' to 'files' table
+  db.run("ALTER TABLE files ADD COLUMN status TEXT DEFAULT 'Pending'", (err) => {
+      if (err && !err.message.includes('duplicate column')) {
+          console.error('Error adding status to files table:', err.message);
+      } else {
+          console.log('Status column ensured in files table.');
+      }
+  });
+
+  db.run("ALTER TABLE files ADD COLUMN reportPath TEXT", (err) => {
+      if (err && !err.message.includes('duplicate column')) {
+          console.error('Error adding reportPath to files table:', err.message);
+      } else {
+          console.log('ReportPath column ensured in files table.');
+      }
+  });
+
+  // Add 'status' to 'urls' table
+  db.run("ALTER TABLE urls ADD COLUMN status TEXT DEFAULT 'Pending'", (err) => {
+      if (err && !err.message.includes('duplicate column')) {
+          console.error('Error adding status to urls table:', err.message);
+      } else {
+          console.log('Status column ensured in urls table.');
+      }
+  });
+});
+
 module.exports = db;

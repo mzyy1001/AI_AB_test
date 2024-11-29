@@ -76,4 +76,65 @@ router.post('/upload-url', (req, res) => {
   });
 });
 
+router.put('/uploads/:id', (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!status) {
+      return res.status(400).json({ error: 'Missing status' });
+  }
+
+  const query = `
+      UPDATE files SET status = ? WHERE id = ?
+      UNION
+      UPDATE urls SET status = ? WHERE id = ?
+  `;
+
+  db.run(query, [status, id, status, id], function (err) {
+      if (err) {
+          console.error('Failed to update status:', err.message);
+          return res.status(500).json({ error: 'Failed to update status' });
+      }
+      res.json({ message: 'Status updated successfully' });
+  });
+});
+
+router.post('/uploads/:id/report', upload.single('report'), (req, res) => {
+  const { id } = req.params;
+  const { file } = req;
+
+  if (!file) {
+      return res.status(400).json({ error: 'No report uploaded' });
+  }
+
+  const query = `UPDATE files SET reportPath = ?, status = 'Completed' WHERE id = ?`;
+
+  db.run(query, [file.path, id], function (err) {
+      if (err) {
+          console.error('Failed to upload report:', err.message);
+          return res.status(500).json({ error: 'Failed to upload report' });
+      }
+      res.json({ message: 'Report uploaded and status updated to Completed' });
+  });
+});
+
+router.get('/uploads', (req, res) => {
+  const query = `
+      SELECT id, filename, filepath, mimetype, size, uploadDate, 'File' AS type, status
+      FROM files
+      UNION
+      SELECT id, url AS filename, NULL AS filepath, NULL AS mimetype, NULL AS size, submitDate AS uploadDate, 'URL' AS type, status
+      FROM urls
+  `;
+
+  db.all(query, [], (err, rows) => {
+      if (err) {
+          console.error('Failed to fetch uploads:', err.message);
+          return res.status(500).json({ error: 'Failed to fetch uploads' });
+      }
+      console.log('Fetched uploads:', rows); // Debug log
+      res.json(rows);
+  });
+});
+
 module.exports = router;
