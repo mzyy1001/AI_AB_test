@@ -17,6 +17,9 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
+// Serve static files in the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -46,6 +49,7 @@ app.use('/users', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // Middleware for serving static files from the React build folder
 app.use(express.static(path.join(__dirname, 'public/build')));

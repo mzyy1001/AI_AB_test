@@ -70,6 +70,15 @@ db.serialize(() => {
       }
   });
 
+  // Add 'updateDate' to 'files' table
+  db.run("ALTER TABLE files ADD COLUMN updateDate TEXT", (err) => {
+      if (err && !err.message.includes('duplicate column')) {
+          console.error('Error adding updateDate to files table:', err.message);
+      } else {
+          console.log('UpdateDate column ensured in files table.');
+      }
+  });
+
   // Add 'status' to 'urls' table
   db.run("ALTER TABLE urls ADD COLUMN status TEXT DEFAULT 'Pending'", (err) => {
       if (err && !err.message.includes('duplicate column')) {
@@ -77,6 +86,14 @@ db.serialize(() => {
       } else {
           console.log('Status column ensured in urls table.');
       }
+  });
+
+  db.run("ALTER TABLE urls ADD COLUMN updateDate TEXT", (err) => {
+    if (err && !err.message.includes("duplicate column")) {
+        console.error("Error adding updateDate to urls table:", err.message);
+    } else {
+        console.log("updateDate column ensured in urls table.");
+    }
   });
 });
 

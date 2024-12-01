@@ -16,7 +16,7 @@ function Login() {
             });
             localStorage.setItem('token', response.data.token);
             alert('Login successful!');
-            window.location.href = '/upload'; // Redirect to upload page
+            window.location.href = '/user'; // Redirect to upload page
         } catch (error) {
             console.error('Login failed:', error.response.data);
             alert('Login failed: ' + error.response.data.error);

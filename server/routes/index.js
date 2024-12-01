@@ -26,6 +26,22 @@ const upload = multer({
   limits: { fileSize: process.env.MAX_FILESIZE * 1024 * 1024 },
 });
 
+const adminCredentials = {
+    username: 'admin',
+    password: 'admin', // Replace with a secure password
+};
+
+router.post('/admin/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (username === adminCredentials.username && password === adminCredentials.password) {
+        res.status(200).json({ token: 'fake-jwt-token' }); // Replace with a real JWT token
+    } else {
+        res.status(401).json({ error: 'Invalid username or password' });
+    }
+});
+
+module.exports = router;
 
 router.post('/upload', upload.single('video'), (req, res) => {
   if (!req.file) {
@@ -77,45 +93,52 @@ router.post('/upload-url', (req, res) => {
 });
 
 router.put('/uploads/:id', (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+    const { id } = req.params;
+    const { status } = req.body;
 
-  if (!status) {
-      return res.status(400).json({ error: 'Missing status' });
-  }
+    if (!status) {
+        return res.status(400).json({ error: 'Missing status' });
+    }
 
-  const query = `
-      UPDATE files SET status = ? WHERE id = ?
-      UNION
-      UPDATE urls SET status = ? WHERE id = ?
-  `;
+    const queryFiles = `
+        UPDATE files SET status = ?, updateDate = datetime('now') WHERE id = ?
+    `;
+    const queryUrls = `
+        UPDATE urls SET status = ?, updateDate = datetime('now') WHERE id = ?
+    `;
 
-  db.run(query, [status, id, status, id], function (err) {
-      if (err) {
-          console.error('Failed to update status:', err.message);
-          return res.status(500).json({ error: 'Failed to update status' });
-      }
-      res.json({ message: 'Status updated successfully' });
-  });
+    db.run(queryFiles, [status, id], function (err) {
+        if (err) {
+            db.run(queryUrls, [status, id], function (err) {
+                if (err) {
+                    console.error('Failed to update status:', err.message);
+                    return res.status(500).json({ error: 'Failed to update status' });
+                }
+                res.json({ message: 'Status updated successfully' });
+            });
+        } else {
+            res.json({ message: 'Status updated successfully' });
+        }
+    });
 });
 
 router.post('/uploads/:id/report', upload.single('report'), (req, res) => {
-  const { id } = req.params;
-  const { file } = req;
+    const { id } = req.params;
+    const { file } = req;
 
-  if (!file) {
-      return res.status(400).json({ error: 'No report uploaded' });
-  }
+    if (!file) {
+        return res.status(400).json({ error: 'No report uploaded' });
+    }
 
-  const query = `UPDATE files SET reportPath = ?, status = 'Completed' WHERE id = ?`;
+    const query = `UPDATE files SET reportPath = ?, status = 'Completed', updateDate = datetime('now') WHERE id = ?`;
 
-  db.run(query, [file.path, id], function (err) {
-      if (err) {
-          console.error('Failed to upload report:', err.message);
-          return res.status(500).json({ error: 'Failed to upload report' });
-      }
-      res.json({ message: 'Report uploaded and status updated to Completed' });
-  });
+    db.run(query, [file.path, id], function (err) {
+        if (err) {
+            console.error('Failed to upload report:', err.message);
+            return res.status(500).json({ error: 'Failed to upload report' });
+        }
+        res.json({ message: 'Report uploaded and status updated to Completed' });
+    });
 });
 
 router.get('/uploads', (req, res) => {
@@ -135,6 +158,24 @@ router.get('/uploads', (req, res) => {
       console.log('Fetched uploads:', rows); // Debug log
       res.json(rows);
   });
+});
+
+router.get('/history', (req, res) => {
+    const query = `
+        SELECT id, filename, reportPath, status, uploadDate, updateDate, 'File' AS type
+        FROM files
+        UNION
+        SELECT id, url AS filename, NULL AS reportPath, status, submitDate AS uploadDate, updateDate, 'URL' AS type
+        FROM urls
+    `;
+
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error('Failed to fetch history:', err.message);
+            return res.status(500).json({ error: 'Failed to fetch history' });
+        }
+        res.json(rows);
+    });
 });
 
 module.exports = router;
