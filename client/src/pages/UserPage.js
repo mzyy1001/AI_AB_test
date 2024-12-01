@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Container, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, LinearProgress } from '@mui/material';
 
-function UploadAndHistory() {
+function UserPage() {
     const [file, setFile] = useState(null);
     const [url, setUrl] = useState('');
     const [progress, setProgress] = useState(0);
@@ -66,69 +67,81 @@ function UploadAndHistory() {
     };
 
     return (
-        <div>
-            <h1>Upload File or Submit URL</h1>
+        <Container>
+            <Typography variant="h4" gutterBottom>
+                Upload File or Submit URL
+            </Typography>
             <form onSubmit={handleFileUpload}>
                 <input type="file" onChange={handleFileChange} />
-                {progress > 0 && <progress value={progress} max="100">{progress}%</progress>}
-                <button type="submit">Upload File</button>
+                {progress > 0 && <LinearProgress variant="determinate" value={progress} />}
+                <Button type="submit" variant="contained" color="primary">
+                    Upload File
+                </Button>
             </form>
 
             <form onSubmit={handleUrlUpload}>
-                <input
+                <TextField
                     type="url"
-                    placeholder="Enter URL"
+                    label="Enter URL"
                     value={url}
                     onChange={handleUrlChange}
+                    fullWidth
+                    margin="normal"
                 />
-                <button type="submit">Submit URL</button>
+                <Button type="submit" variant="contained" color="primary">
+                    Submit URL
+                </Button>
             </form>
 
-            <h2>Your Upload History</h2>
+            <Typography variant="h5" gutterBottom>
+                Your Upload History
+            </Typography>
             {history.length > 0 ? (
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>File/URL Name</th>
-                            <th>Type</th>
-                            <th>Report</th>
-                            <th>Status</th>
-                            <th>Upload Date</th>
-                            <th>Last Updated</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {history.map((item) => (
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.filename}</td>
-                                <td>{item.type}</td>
-                                <td>
-                                    {item.reportPath ? (
-                                        <a
-                                            href={`http://localhost:3000/${item.reportPath}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            View Report
-                                        </a>
-                                    ) : (
-                                        'No Report'
-                                    )}
-                                </td>
-                                <td>{item.status}</td>
-                                <td>{new Date(item.uploadDate).toLocaleDateString()}</td>
-                                <td>{item.updateDate ? new Date(item.updateDate).toLocaleDateString() : 'N/A'}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>File/URL Name</TableCell>
+                                <TableCell>Type</TableCell>
+                                <TableCell>Report</TableCell>
+                                <TableCell>Status</TableCell>
+                                <TableCell>Upload Date</TableCell>
+                                <TableCell>Last Updated</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {history.map((item) => (
+                                <TableRow key={item.id}>
+                                    <TableCell>{item.id}</TableCell>
+                                    <TableCell>{item.filename}</TableCell>
+                                    <TableCell>{item.type}</TableCell>
+                                    <TableCell>
+                                        {item.reportPath ? (
+                                            <a
+                                                href={`http://localhost:3000/${item.reportPath}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                View Report
+                                            </a>
+                                        ) : (
+                                            'No Report'
+                                        )}
+                                    </TableCell>
+                                    <TableCell>{item.status}</TableCell>
+                                    <TableCell>{new Date(item.uploadDate).toLocaleDateString()}</TableCell>
+                                    <TableCell>{item.updateDate ? new Date(item.updateDate).toLocaleDateString() : 'N/A'}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             ) : (
-                <p>No history available.</p>
+                <Typography>No history available.</Typography>
             )}
-        </div>
+        </Container>
     );
 }
 
-export default UploadAndHistory;
+export default UserPage;
