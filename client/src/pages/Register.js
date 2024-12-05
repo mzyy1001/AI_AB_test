@@ -1,55 +1,100 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import styles from '../css/Register.module.css'; // Path should be correct
+import logo from '../logos/blacklogo.png'; // Ensure the logo path is accurate
 
 function Register() {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [step, setStep] = useState(1);
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        try {
-            // Call the /register API
-            const response = await axios.post('http://localhost:3000/users/register', {
-                email,
-                password,
-                name,
-            });
-            alert('Registration successful! Please log in.');
-            window.location.href = '/'; // Redirect to login
-        } catch (error) {
-            console.error('Registration failed:', error.response.data);
-            alert('Registration failed: ' + error.response.data.error);
-        }
+    const nextStep = () => setStep(step + 1);
+    const prevStep = () => setStep(step - 1);
+
+    const handleRegister = async () => {
+        // Registration logic
     };
 
     return (
-        <div>
-            <h1>Register</h1>
-            <form onSubmit={handleRegister}>
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Register</button>
-            </form>
+        <div className={styles.body}>
+            <div className={styles.container}>
+                <div className={styles.logo}>
+                    <img src={logo} alt="Logo" />
+                </div>
+                <h1 className={styles.heading}>Create an account</h1>
+                {step === 1 && (
+                    <div>
+                        <p className={styles.paragraph}>Enter your email address</p>
+                        <input
+                            type="email"
+                            placeholder="Enter your email address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={styles.input}
+                            required
+                        />
+                        <button
+                            onClick={nextStep}
+                            disabled={!email}
+                            className={styles.button}
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
+                {step === 2 && (
+                    <div>
+                        <p className={styles.paragraph}>Provide your basic info</p>
+                        <input
+                            type="text"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className={styles.input}
+                            required
+                        />
+                        <button onClick={prevStep} className={styles.button}>
+                            Back
+                        </button>
+                        <button
+                            onClick={nextStep}
+                            disabled={!name}
+                            className={styles.button}
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
+                {step === 3 && (
+                    <div>
+                        <p className={styles.paragraph}>Create your password</p>
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className={styles.input}
+                            required
+                        />
+                        <button onClick={prevStep} className={styles.button}>
+                            Back
+                        </button>
+                        <button
+                            onClick={handleRegister}
+                            disabled={!password}
+                            className={styles.button}
+                        >
+                            Register
+                        </button>
+                    </div>
+                )}
+                <p className={styles.paragraph}>
+                    Already have an account?{' '}
+                    <a href="/login" className={styles.link}>
+                        Log in
+                    </a>
+                </p>
+            </div>
         </div>
     );
 }

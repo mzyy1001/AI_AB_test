@@ -268,6 +268,18 @@ router.get(
   }
 );
 
+router.get('/validate-token', 
+  passport.authenticate('admin-strategy', { session: false }), 
+  (req, res) => {
+    // If authentication succeeds, passport adds the user to `req.user`
+    res.json({
+      valid: true,
+      message: 'Token is valid',
+      user: req.user, // You can include user details from the token
+    });
+  }
+);
+
 router.use((req, res, next) => {
   console.log(`Unhandled request: ${req.method} ${req.originalUrl}`);
   res.status(404).send('Not Found');
