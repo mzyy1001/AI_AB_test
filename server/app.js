@@ -1,75 +1,68 @@
 require('dotenv').config();
 
-const createError = require('http-errors');
 const express = require('express');
+const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
 const path = require('path');
-
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-
-const db = require('./database/db');  // use db
+const db = require('./database/db'); // Import your database configuration
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
 
-// Serve static files in the 'uploads' directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
+// Middleware setup
+app.use(cors()); // Enable CORS for cross-origin requests
+app.use(logger('dev')); // Logging
+app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
+app.use(cookieParser()); // Parse cookies
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// initialize Passport
+// Static file serving
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from 'uploads'
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from 'public'
+app.use(express.static(path.join(__dirname, 'public/build'))); // Serve React's build folder
+
+// View engine setup
+app.set('views', path.join(__dirname, 'views')); // View templates folder
+app.set('view engine', 'jade'); // Use Jade (Pug) as the view engine
+
+// Passport initialization
 app.use(passport.initialize());
+require('./config/passport')(passport); // Passport configuration
 
-// Passport config
-require('./config/passport')(passport);
+// app.use((req, res, next) => {
+//     console.log(`${req.method} ${req.url} - Body:`, req.body);
+//     next();
+// });
 
-// route config
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// Route configurations
+app.use('/', indexRouter); // Root routes
+app.use('/users', usersRouter); // User routes
 
-// catch 404
-app.use(function(req, res, next) {
-  next(createError(404));
+// Error handling middleware
+app.use((err, req, res, next) => {
+    res.locals.message = err.message; // Pass error message to locals
+    res.locals.error = req.app.get('env') === 'development' ? err : {}; // Show stack trace in development only
+    res.locals.title = 'Error'; // Title for the error page
+    res.status(err.status || 500); // Default to 500 status code
+    res.render('error'); // Render error view
 });
 
-
-// Middleware for serving static files from the React build folder
-app.use(express.static(path.join(__dirname, 'public/build')));
-
-// API routes (add your existing API routes here)
-app.use('/api/users', require('./routes/users'));
-app.use('/api/upload', require('./routes/index'));
-
-// Catch-all route to serve React's index.html for any unmatched routes
+// React fallback route for client-side routing
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/build', 'index.html'));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.locals.title = 'Error';
-  res.status(err.status || 500);
-  res.render('error');
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+    next(createError(404));
 });
 
 module.exports = app;

@@ -5,6 +5,18 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const db = require('../database/db');
+const jwt = require('jsonwebtoken');
+
+/*check payment*/
+router.get('/surveys', (req, res) => {
+    db.all('SELECT * FROM surveys', [], (err, rows) => {
+      if (err) {
+        console.error('Failed to fetch surveys:', err.message);
+        return res.status(500).json({ error: 'Failed to fetch surveys' });
+      }
+      res.json(rows);
+    });
+  });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -33,64 +45,68 @@ const adminCredentials = {
 
 router.post('/admin/login', (req, res) => {
     const { username, password } = req.body;
-
+  
     if (username === adminCredentials.username && password === adminCredentials.password) {
-        res.status(200).json({ token: 'fake-jwt-token' }); // Replace with a real JWT token
+      // Generate a JWT token for the admin
+      const payload = { username: adminCredentials.username, role: 'admin' };
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.status(200).json({ token: 'Bearer ' + token });
     } else {
-        res.status(401).json({ error: 'Invalid username or password' });
+      res.status(401).json({ error: 'Invalid username or password' });
     }
-});
+  });
 
-module.exports = router;
+const passport = require('passport');
 
-router.post('/upload', upload.single('video'), (req, res) => {
-  if (!req.file) {
+router.post('/upload', passport.authenticate('user-strategy', { session: false }), upload.single('video'), (req, res) => {
+    if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
-  }
-
-  // Extract file details from the request
-  const { filename, path: filepath, mimetype, size } = req.file;
-
-  // Save file metadata to the database
-  const query = `INSERT INTO files (filename, filepath, mimetype, size) VALUES (?, ?, ?, ?)`;
-
-  db.run(query, [filename, filepath, mimetype, size], function (err) {
+    }
+  
+    const { filename, path: filepath, mimetype, size } = req.file;
+    const userId = req.user.id;
+  
+    db.run(`INSERT INTO files (filename, filepath, mimetype, size) VALUES (?, ?, ?, ?)`, [filename, filepath, mimetype, size], function (err) {
       if (err) {
-          console.error('Failed to save file to database:', err.message);
-          return res.status(500).json({ error: 'Failed to save file metadata' });
+        console.error('Failed to save file to database:', err.message);
+        return res.status(500).json({ error: 'Failed to save file metadata' });
       }
-      // Respond with success message and file ID
-      res.status(200).json({ 
-          message: 'File uploaded successfully', 
-          file: req.file, 
-          fileId: this.lastID 
+  
+      db.run(`UPDATE users SET usageCount = usageCount - 1 WHERE id = ? AND usageCount > 0`, [userId], function (err) {
+        if (err) {
+          console.error('Failed to update usage count:', err.message);
+          return res.status(500).json({ error: 'Failed to update usage count' });
+        }
+  
+        res.status(200).json({ message: 'File uploaded successfully', file: req.file, fileId: this.lastID });
       });
+    });
   });
-});
-
-router.post('/upload-url', (req, res) => {
-  const { url } = req.body; // Extract the URL from the request body
-
-  if (!url || !url.startsWith('http')) {
+  
+  router.post('/upload-url', passport.authenticate('user-strategy', { session: false }), (req, res) => {
+    const { url } = req.body;
+    const userId = req.user.id;
+  
+    if (!url || !url.startsWith('http')) {
       return res.status(400).json({ error: 'Invalid URL provided' });
-  }
-
-  // Save the URL to the database
-  const query = `INSERT INTO urls (url) VALUES (?)`;
-  db.run(query, [url], function (err) {
+    }
+  
+    db.run(`INSERT INTO urls (url) VALUES (?)`, [url], function (err) {
       if (err) {
-          console.error('Failed to save URL to database:', err.message);
-          return res.status(500).json({ error: 'Failed to save URL' });
+        console.error('Failed to save URL to database:', err.message);
+        return res.status(500).json({ error: 'Failed to save URL' });
       }
-
-      // Respond with success message and the inserted URL ID
-      res.status(200).json({
-          message: 'URL uploaded successfully',
-          url,
-          urlId: this.lastID
+  
+      db.run(`UPDATE users SET usageCount = usageCount - 1 WHERE id = ? AND usageCount > 0`, [userId], function (err) {
+        if (err) {
+          console.error('Failed to update usage count:', err.message);
+          return res.status(500).json({ error: 'Failed to update usage count' });
+        }
+  
+        res.status(200).json({ message: 'URL uploaded successfully', url, urlId: this.lastID });
       });
+    });
   });
-});
 
 router.put('/uploads/:id', (req, res) => {
     const { id } = req.params;
@@ -155,7 +171,6 @@ router.get('/uploads', (req, res) => {
           console.error('Failed to fetch uploads:', err.message);
           return res.status(500).json({ error: 'Failed to fetch uploads' });
       }
-      console.log('Fetched uploads:', rows); // Debug log
       res.json(rows);
   });
 });

@@ -10,20 +10,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   console.log('Connected to the SQLite database.');
 });
 
-// Create users table if not exists
-db.run(`CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  email TEXT UNIQUE,
-  password TEXT,
-  name TEXT,
-  date TEXT DEFAULT (datetime('now'))
-)`, (err) => {
-  if (err) {
-    console.error('Failed to create users table:', err.message);
-  } else {
-    console.log('Users table ready');
-  }
-});
 
 db.run(`CREATE TABLE IF NOT EXISTS files (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,6 +36,32 @@ db.run(`CREATE TABLE IF NOT EXISTS urls (
   } else {
       console.log('URLs table ready');
   }
+});
+
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE,
+    username TEXT,
+    password TEXT,
+    usageCount INTEGER DEFAULT 0,
+    date TEXT DEFAULT (datetime('now'))
+  )`, (err) => {
+    if (err) console.error('Failed to create users table:', err.message);
+    else console.log('Users table ready');
+  });
+
+  db.run(`CREATE TABLE IF NOT EXISTS surveys (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    companyName TEXT,
+    contactInfo TEXT,
+    submitDate TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  )`, (err) => {
+    if (err) console.error('Failed to create surveys table:', err.message);
+    else console.log('Surveys table ready');
+  });
 });
 
 db.serialize(() => {

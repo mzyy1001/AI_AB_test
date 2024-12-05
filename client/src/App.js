@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Admin from './pages/Admin';
 import UserPage from './pages/UserPage';
 import AdminLogin from './pages/AdminLogin';
+import RechargePage from './pages/ReChargePage';
 
 function App() {
     const [token, setToken] = useState(null);
@@ -21,9 +22,10 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/admin" element={token ? <Admin token={token} /> : <Navigate to="/admin-login" />} />
+                <Route path="/admin" element={<Admin />} />
                 <Route path="/user" element={<UserPage />} />
-                <Route path="/admin-login" element={<AdminLogin onLogin={handleLogin} />} />
+                <Route path="/recharge" element={<RechargePage />} />
+                <Route path="/admin-login" element={<AdminLogin />} />
             </Routes>
         </Router>
     );
