@@ -28,7 +28,7 @@ function Admin() {
 
   const fetchUploads = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/uploads');
+      const response = await axios.get('/uploads');
       setUploads(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -41,7 +41,7 @@ function Admin() {
 
   const fetchSurveys = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/users/surveys');
+      const response = await axios.get('/users/surveys');
       setSurveys(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -54,7 +54,7 @@ function Admin() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/users/getUsers');
+      const response = await axios.get('/users/getUsers');
       if (Array.isArray(response.data)) {
         setUsers(response.data);
       } else {
@@ -98,7 +98,7 @@ function Admin() {
 
   const updateUsageCount = async (userId, usageCount) => {
     try {
-      await axios.post('http://localhost:5000/users/updateUsageCount', { userId, usageCount });
+      await axios.post('/users/updateUsageCount', { userId, usageCount });
       alert('Usage count updated successfully');
       fetchUsers();
     } catch (error) {
