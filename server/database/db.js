@@ -17,7 +17,8 @@ db.run(`CREATE TABLE IF NOT EXISTS files (
   filepath TEXT,
   mimetype TEXT,
   size INTEGER,
-  uploadDate TEXT DEFAULT (datetime('now'))
+  uploadDate TEXT DEFAULT (datetime('now')),
+  userId INTEGER NOT NULL
 )`, (err) => {
   if (err) {
       console.error('Failed to create files table:', err.message);
@@ -29,7 +30,8 @@ db.run(`CREATE TABLE IF NOT EXISTS files (
 db.run(`CREATE TABLE IF NOT EXISTS urls (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   url TEXT UNIQUE,
-  submitDate TEXT DEFAULT (datetime('now'))
+  submitDate TEXT DEFAULT (datetime('now')),
+  userId INTEGER NOT NULL
 )`, (err) => {
   if (err) {
       console.error('Failed to create urls table:', err.message);
@@ -37,6 +39,7 @@ db.run(`CREATE TABLE IF NOT EXISTS urls (
       console.log('URLs table ready');
   }
 });
+
 
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (

@@ -12,8 +12,34 @@ function Register() {
     const prevStep = () => setStep(step - 1);
 
     const handleRegister = async () => {
-        // Registration logic
+        try {
+            const response = await fetch('/users/register', { // Make sure this matches the route in your server
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password, name }),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                alert('Registration successful!');
+                // Redirect to login page or any other route
+                window.location.href = '/login';
+            } else {
+                const errorData = await response.json();
+                if (errorData.email) {
+                    alert(`Error: ${errorData.email}`);
+                } else {
+                    alert('Registration failed. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An unexpected error occurred. Please try again later.');
+        }
     };
+    
 
     return (
         <div className={styles.body}>

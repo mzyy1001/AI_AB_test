@@ -29,7 +29,7 @@ function UserPage() {
 
   const fetchUsageCount = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/users/usageCount');
+      const response = await axios.get('/users/usageCount');
       setUsageCount(response.data.usageCount);
     } catch (error) {
       console.error('Failed to fetch usage count:', error);

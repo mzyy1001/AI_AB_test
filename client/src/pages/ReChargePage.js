@@ -12,7 +12,7 @@ function RechargePage() {
     // console.log('Token from localStorage:', token); 
     try {
       const response = await axios.post(
-        'http://localhost:3000/users/submitSurvey',
+        '/users/submitSurvey',
         { companyName, contactInfo },
         {
           headers: {

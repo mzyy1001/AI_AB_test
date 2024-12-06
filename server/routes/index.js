@@ -59,54 +59,68 @@ router.post('/admin/login', (req, res) => {
 const passport = require('passport');
 
 router.post('/upload', passport.authenticate('user-strategy', { session: false }), upload.single('video'), (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-  
-    const { filename, path: filepath, mimetype, size } = req.file;
-    const userId = req.user.id;
-  
-    db.run(`INSERT INTO files (filename, filepath, mimetype, size) VALUES (?, ?, ?, ?)`, [filename, filepath, mimetype, size], function (err) {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+
+  const { filename, path: filepath, mimetype, size } = req.file;
+  const userId = req.user.id;
+
+  db.run(
+    `INSERT INTO files (filename, filepath, mimetype, size, userId) VALUES (?, ?, ?, ?, ?)`,
+    [filename, filepath, mimetype, size, userId],
+    function (err) {
       if (err) {
         console.error('Failed to save file to database:', err.message);
         return res.status(500).json({ error: 'Failed to save file metadata' });
       }
-  
-      db.run(`UPDATE users SET usageCount = usageCount - 1 WHERE id = ? AND usageCount > 0`, [userId], function (err) {
-        if (err) {
-          console.error('Failed to update usage count:', err.message);
-          return res.status(500).json({ error: 'Failed to update usage count' });
+
+      db.run(
+        `UPDATE users SET usageCount = usageCount - 1 WHERE id = ? AND usageCount > 0`,
+        [userId],
+        function (err) {
+          if (err) {
+            console.error('Failed to update usage count:', err.message);
+            return res.status(500).json({ error: 'Failed to update usage count' });
+          }
+
+          res.status(200).json({
+            message: 'File uploaded successfully',
+            file: req.file,
+            fileId: this.lastID,
+          });
         }
-  
-        res.status(200).json({ message: 'File uploaded successfully', file: req.file, fileId: this.lastID });
-      });
-    });
-  });
-  
-  router.post('/upload-url', passport.authenticate('user-strategy', { session: false }), (req, res) => {
-    const { url } = req.body;
-    const userId = req.user.id;
-  
-    if (!url || !url.startsWith('http')) {
-      return res.status(400).json({ error: 'Invalid URL provided' });
+      );
     }
-  
-    db.run(`INSERT INTO urls (url) VALUES (?)`, [url], function (err) {
+  );
+});
+
+
+router.post('/upload-url', passport.authenticate('user-strategy', { session: false }), (req, res) => {
+  const { url } = req.body;
+  const userId = req.user.id;
+
+  if (!url || !url.startsWith('http')) {
+    return res.status(400).json({ error: 'Invalid URL provided' });
+  }
+
+  db.run(`INSERT INTO urls (url, userId) VALUES (?, ?)`, [url, userId], function (err) {
+    if (err) {
+      console.error('Failed to save URL to database:', err.message);
+      return res.status(500).json({ error: 'Failed to save URL' });
+    }
+
+    db.run(`UPDATE users SET usageCount = usageCount - 1 WHERE id = ? AND usageCount > 0`, [userId], function (err) {
       if (err) {
-        console.error('Failed to save URL to database:', err.message);
-        return res.status(500).json({ error: 'Failed to save URL' });
+        console.error('Failed to update usage count:', err.message);
+        return res.status(500).json({ error: 'Failed to update usage count' });
       }
-  
-      db.run(`UPDATE users SET usageCount = usageCount - 1 WHERE id = ? AND usageCount > 0`, [userId], function (err) {
-        if (err) {
-          console.error('Failed to update usage count:', err.message);
-          return res.status(500).json({ error: 'Failed to update usage count' });
-        }
-  
-        res.status(200).json({ message: 'URL uploaded successfully', url, urlId: this.lastID });
-      });
+
+      res.status(200).json({ message: 'URL uploaded successfully', url, urlId: this.lastID });
     });
   });
+});
+
 
 router.put('/uploads/:id', (req, res) => {
     const { id } = req.params;
@@ -174,23 +188,26 @@ router.get('/uploads', (req, res) => {
       res.json(rows);
   });
 });
+router.get('/history', passport.authenticate('user-strategy', { session: false }), (req, res) => {
+  const userId = req.user.id;
+  const query = `
+      SELECT id, filename, reportPath, status, uploadDate, updateDate, 'File' AS type
+      FROM files
+      WHERE userId = ?
+      UNION
+      SELECT id, url AS filename, NULL AS reportPath, status, submitDate AS uploadDate, updateDate, 'URL' AS type
+      FROM urls
+      WHERE userId = ?
+  `;
 
-router.get('/history', (req, res) => {
-    const query = `
-        SELECT id, filename, reportPath, status, uploadDate, updateDate, 'File' AS type
-        FROM files
-        UNION
-        SELECT id, url AS filename, NULL AS reportPath, status, submitDate AS uploadDate, updateDate, 'URL' AS type
-        FROM urls
-    `;
-
-    db.all(query, [], (err, rows) => {
-        if (err) {
-            console.error('Failed to fetch history:', err.message);
-            return res.status(500).json({ error: 'Failed to fetch history' });
-        }
-        res.json(rows);
-    });
+  db.all(query, [userId, userId], (err, rows) => {
+      if (err) {
+          console.error('Failed to fetch history:', err.message);
+          return res.status(500).json({ error: 'Failed to fetch history' });
+      }
+      res.json(rows);
+  });
 });
+
 
 module.exports = router;
