@@ -7,14 +7,9 @@ import Admin from './pages/Admin';
 import UserPage from './pages/UserPage';
 import AdminLogin from './pages/AdminLogin';
 import RechargePage from './pages/ReChargePage';
+import SceneS from './pages/OneNebulaScene';
 
 function App() {
-    const [token, setToken] = useState(null);
-
-    const handleLogin = (token) => {
-        console.log('Setting token:', token); // Debugging log
-        setToken(token);
-    };
 
     return (
         <Router>
@@ -26,6 +21,7 @@ function App() {
                 <Route path="/user" element={<UserPage />} />
                 <Route path="/recharge" element={<RechargePage />} />
                 <Route path="/admin-login" element={<AdminLogin />} />
+                <Route path='/scene' element={<SceneS />} />
             </Routes>
         </Router>
     );
