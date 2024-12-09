@@ -1,0 +1,87 @@
+/* RechargePage.module.css */
+.body {
+    background-color: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    padding: 30px;
+}
+
+.rechargeContainer {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    width: 60%;
+    margin: 50px auto;
+}
+
+.headerTitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inputFieldContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputLabel {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.inputField {
+    padding: 12px;
+    background-color: #272727;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+    min-height: 100px;
+    /* Adjusted for taller fields */
+    resize: vertical;
+    /* Allow users to resize vertically if needed */
+    white-space: pre-wrap;
+    /* Ensure text wraps properly */
+    word-wrap: break-word;
+    /* Handle long text that doesn't fit by wrapping it properly */
+}
+
+.inputField::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.submitButton {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.submitButton:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+}

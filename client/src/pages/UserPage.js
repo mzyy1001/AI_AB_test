@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom for navigation
 import styles from '../css/UserPage.module.css';
 
 function UserPage() {
@@ -109,6 +110,12 @@ function UserPage() {
       <div className={styles.uploadContainer}>
         <h1>Upload File or Submit URL</h1>
         <p>Remaining Usage Count: {usageCount}</p>
+
+        {/* "Go Recharge" Link */}
+        {usageCount <= 0 && (
+          <Link to="/recharge" className={styles.rechargeLink}>Go Recharge</Link>
+        )}
+
         <form onSubmit={handleFileUpload} className={styles.uploadForm}>
           <div className={styles.fileInput}>
             <label className={styles.fileLabel}>
@@ -157,7 +164,7 @@ function UserPage() {
             </tbody>
           </table>
         ) : (
-          <p>No history available.</p>
+          <p className={styles.noHistory}>No history available.</p>
         )}
       </div>
     </div>

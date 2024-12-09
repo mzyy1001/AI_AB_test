@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography } from '@mui/material';
+import { Container, Button, Typography } from '@mui/material';
 import axios from 'axios';
+import styles from '../css/RechargePage.module.css';
 
 function RechargePage() {
   const [companyName, setCompanyName] = useState('');
@@ -9,14 +10,13 @@ function RechargePage() {
   const handleSurveySubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    // console.log('Token from localStorage:', token); 
     try {
       const response = await axios.post(
         '/users/submitSurvey',
         { companyName, contactInfo },
         {
           headers: {
-            Authorization: token, // Include the token in the request headers
+            Authorization: token,
           },
         }
       );
@@ -31,30 +31,40 @@ function RechargePage() {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Recharge
-      </Typography>
-      <form onSubmit={handleSurveySubmit}>
-        <TextField
-          label="Company Name"
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Contact Info"
-          value={contactInfo}
-          onChange={(e) => setContactInfo(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Submit Survey
-        </Button>
-      </form>
-    </Container>
+    <div className={styles.body}>
+      <div className={styles.rechargeContainer}>
+        <h1 variant="h4" className={styles.headerTitle}>
+          Recharge
+        </h1>
+        <form onSubmit={handleSurveySubmit} className={styles.form}>
+          <div className={styles.inputFieldContainer}>
+            <label className={styles.inputLabel}>Company Name</label>
+            <textarea
+              className={styles.inputField}
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="Enter your company name"
+              rows="4" // Define the height of the textarea
+            />
+          </div>
+
+          <div className={styles.inputFieldContainer}>
+            <label className={styles.inputLabel}>Contact Info</label>
+            <textarea
+              className={styles.inputField}
+              value={contactInfo}
+              onChange={(e) => setContactInfo(e.target.value)}
+              placeholder="Enter your contact info"
+              rows="4"
+            />
+          </div>
+
+          <button type="submit" className={styles.submitButton}>
+            Submit Survey
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
 

@@ -55,6 +55,22 @@
     line-height: 1.5;
 }
 
+/* Recharge Link Styling */
+.rechargeLink {
+    color: #4CAF50; /* Green color for the link */
+    text-decoration: underline;
+    display: block;
+    margin-top: 10px; /* Space between usage count and link */
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center; /* Center the link for consistency */
+  }
+  
+  .rechargeLink:hover {
+    color: #45a049; /* Darker green on hover */
+  }
+  
+
 .uploadContainer {
     background-color: #1e1e1e;
     border-radius: 20px;
@@ -136,12 +152,10 @@ h2 {
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
-    /* Or another guessed font */
     font-size: 14px;
     font-weight: 400;
-    /* Medium weight */
     text-transform: uppercase;
-    /* Capitalizes the text like in the image */
+    transition: background-color 0.3s;
 }
 
 .uploadButton:hover {
@@ -186,6 +200,12 @@ h2 {
 
 .table tr:hover {
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+.noHistory {
+    text-align: center;
+    align-content: center;
+    height: 50px;
 }
 
 .progressBar {
