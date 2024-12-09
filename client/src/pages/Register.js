@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../css/Register.module.css'; // Path should be correct
-//import logo from '../logos/blacklogo.png'; // Ensure the logo path is accurate
+import styles from '../css/Register.module.css';
+//import logo from '../logos/blacklogo.png';
 
 function Register() {
     const [email, setEmail] = useState('');

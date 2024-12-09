@@ -1,8 +1,6 @@
-// client/src/pages/UserPage.js
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Button, Typography, LinearProgress, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import styles from '../css/UserPage.module.css';
 
 function UserPage() {
   const [file, setFile] = useState(null);
@@ -65,8 +63,8 @@ function UserPage() {
         },
       });
       alert(response.data.message || 'File uploaded successfully!');
-      fetchHistory(); // Refresh history after successful upload
-      fetchUsageCount(); // Refresh usage count after successful upload
+      fetchHistory();
+      fetchUsageCount();
     } catch (error) {
       console.error('File upload failed:', error);
       alert('File upload failed!');
@@ -87,8 +85,8 @@ function UserPage() {
     try {
       const response = await axios.post('/upload-url', { url });
       alert(response.data.message || 'URL uploaded successfully!');
-      fetchHistory(); // Refresh history after successful upload
-      fetchUsageCount(); // Refresh usage count after successful upload
+      fetchHistory();
+      fetchUsageCount();
     } catch (error) {
       console.error('URL upload failed:', error);
       alert('URL upload failed!');
@@ -96,83 +94,73 @@ function UserPage() {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Upload File or Submit URL
-      </Typography>
-      <Typography variant="h6" gutterBottom>
-        Remaining Usage Count: {usageCount}
-      </Typography>
-      <form onSubmit={handleFileUpload}>
-        <input type="file" onChange={handleFileChange} />
-        {progress > 0 && <LinearProgress variant="determinate" value={progress} />}
-        <Button type="submit" variant="contained" color="primary">
-          Upload File
-        </Button>
-      </form>
+    <div className={styles.body}>
+      {/* Updated Header Section */}
+      <header className={styles.header}>
+        <h1 className={styles.labTitle}>AI_LAB_TEST</h1>
+        <div className={styles.underline}></div>
+        <h2 className={styles.mainTitle}>Advanced AI Testing Platform</h2>
+        <p className={styles.subtitle}>
+          A sophisticated platform for conducting A/B tests using AI models. Upload videos or submit URLs for analysis.
+        </p>
+      </header>
 
-      <form onSubmit={handleUrlUpload}>
-        <TextField
-          type="url"
-          label="Enter URL"
-          value={url}
-          onChange={handleUrlChange}
-          fullWidth
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Submit URL
-        </Button>
-      </form>
+      {/* Upload Section */}
+      <div className={styles.uploadContainer}>
+        <h1>Upload File or Submit URL</h1>
+        <p>Remaining Usage Count: {usageCount}</p>
+        <form onSubmit={handleFileUpload} className={styles.uploadForm}>
+          <div className={styles.fileInput}>
+            <label className={styles.fileLabel}>
+              <input type="file" onChange={handleFileChange} />
+              Drag and drop files here or click to browse
+            </label>
+          </div>
+          {progress > 0 && <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>}
+          <button type="submit" className={styles.uploadButton}>Upload File</button>
+        </form>
+        <form onSubmit={handleUrlUpload} className={styles.uploadForm}>
+          <input
+            type="url"
+            placeholder="Enter URL"
+            value={url}
+            onChange={handleUrlChange}
+            className={styles.urlInput}
+          />
+          <button type="submit" className={styles.uploadButton}>Submit URL</button>
+        </form>
+      </div>
 
-      <Typography variant="h5" gutterBottom>
-        Your Upload History
-      </Typography>
-      {history.length > 0 ? (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>File/URL Name</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell>Report</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Upload Date</TableCell>
-                <TableCell>Last Updated</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+      {/* History Section */}
+      <div className={styles.historySection}>
+        {history.length > 0 ? (
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>File/URL Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Upload Date</th>
+              </tr>
+            </thead>
+            <tbody>
               {history.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.id}</TableCell>
-                  <TableCell>{item.filename}</TableCell>
-                  <TableCell>{item.type}</TableCell>
-                  <TableCell>
-                    {item.reportPath ? (
-                      <a href={`/${item.reportPath}`} target="_blank" rel="noopener noreferrer">
-                        View Report
-                      </a>
-                    ) : (
-                      'No Report'
-                    )}
-                  </TableCell>
-                  <TableCell>{item.status}</TableCell>
-                  <TableCell>{new Date(item.uploadDate).toLocaleDateString()}</TableCell>
-                  <TableCell>{item.updateDate ? new Date(item.updateDate).toLocaleDateString() : 'N/A'}</TableCell>
-                </TableRow>
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.filename}</td>
+                  <td>{item.type}</td>
+                  <td>{item.status}</td>
+                  <td>{new Date(item.uploadDate).toLocaleDateString()}</td>
+                </tr>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <Typography>No history available.</Typography>
-      )}
-
-      <Typography variant="h6" gutterBottom>
-        Need more usage count? <Link to="/recharge">Recharge here</Link>
-      </Typography>
-    </Container>
+            </tbody>
+          </table>
+        ) : (
+          <p>No history available.</p>
+        )}
+      </div>
+    </div>
   );
 }
 
