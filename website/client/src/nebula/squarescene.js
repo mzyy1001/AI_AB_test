@@ -7,7 +7,7 @@ const SquareScene = () => {
 
   useEffect(() => {
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x160016);
+    scene.background = new THREE.Color(0x000000);
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(75, 75, 150); // Adjusted to see the square and axes better
@@ -23,14 +23,16 @@ const SquareScene = () => {
     const gu = {
       time: { value: 0 },
       transitionProgress: { value: 0 },
-      finalStyle2Ratio: { value: 0.3 },
+      finalStyle2Ratio: { value: 0.8 },
+      columnTransitionProgress: { value: 0 }, 
+      columnWidth: { value: 100 },
     };
-
     const sizes = [];
+    const sizes2 = [];
     const shift = [];
     const thresholds = [];
 
-    const clusterCenter = new THREE.Vector3(50, 50, 50);
+    const clusterCenter = new THREE.Vector3(80, 80, 80);
 
     const pushShift = () => {
       shift.push(
@@ -43,7 +45,7 @@ const SquareScene = () => {
 
     const calculateClusterProbability = (position) => {
       const distance = position.distanceTo(clusterCenter);
-      return Math.exp(-Math.pow(distance, 2) / 500);
+      return Math.exp(-Math.pow(distance, 2) / 4000);
     };
 
     const generateRandomSquarePosition = () => {
@@ -54,8 +56,9 @@ const SquareScene = () => {
       );
     };
 
-    const pts = new Array(20000).fill().map(() => {
-      sizes.push(Math.random() * 1.5 + 0.5);
+    const pts = new Array(40000).fill().map(() => {
+      sizes.push(Math.random());
+      sizes2.push(Math.random());
       pushShift();
 
       const position = generateRandomSquarePosition();
@@ -67,8 +70,9 @@ const SquareScene = () => {
       return position;
     });
 
-    for (let i = 0; i < 40000; i++) {
-      sizes.push(Math.random() * 1.5 + 0.5);
+    for (let i = 0; i < 80000; i++) {
+      sizes.push(Math.random());
+      sizes2.push(Math.random());
       pushShift();
 
       const position = generateRandomSquarePosition();
@@ -78,11 +82,22 @@ const SquareScene = () => {
 
       pts.push(position);
     }
-
     const g = new THREE.BufferGeometry().setFromPoints(pts);
     g.setAttribute("sizes", new THREE.Float32BufferAttribute(sizes, 1));
+    g.setAttribute("sizes2", new THREE.Float32BufferAttribute(sizes2, 1));
     g.setAttribute("shift", new THREE.Float32BufferAttribute(shift, 4));
     g.setAttribute("threshold", new THREE.Float32BufferAttribute(thresholds, 1));
+
+
+    const style1Count = thresholds.filter((threshold) => threshold >= 0.5).length;
+    const style2Count = thresholds.filter((threshold) => threshold < 0.5).length;
+    const totalCount = style1Count + style2Count;
+
+    console.log("Style 1 Count:", style1Count);
+    console.log("Style 2 Count:", style2Count);
+    const style1Width = (style1Count / totalCount) * 100; // Proportional width for style1
+    const style2Width = (style2Count / totalCount) * 100; // Proportional width for style2
+
 
     const m = new THREE.PointsMaterial({
       size: 0.125,
@@ -93,38 +108,55 @@ const SquareScene = () => {
         shader.uniforms.time = gu.time;
         shader.uniforms.transitionProgress = gu.transitionProgress;
         shader.uniforms.finalStyle2Ratio = gu.finalStyle2Ratio;
-
+        shader.uniforms.columnTransitionProgress = gu.columnTransitionProgress;
+        shader.uniforms.style1ColumnCenter = { value: new THREE.Vector3(-20, 0, 0) };
+        shader.uniforms.style2ColumnCenter = { value: new THREE.Vector3(20, 0, 0) };
+        shader.uniforms.style1columnWidth = { value: style1Width };
+        shader.uniforms.style2columnWidth = { value: style2Width };
         shader.vertexShader = `
-          uniform float time;
-          uniform float transitionProgress;
-          uniform float finalStyle2Ratio;
-          attribute float sizes;
-          attribute vec4 shift;
-          attribute float threshold;
-          varying vec3 vColor;
+        uniform float time;
+        uniform float transitionProgress;
+        uniform float finalStyle2Ratio;
+        uniform float columnTransitionProgress;
+        uniform float style1columnWidth;
+        uniform float style2columnWidth;
+        uniform vec3 style1ColumnCenter;
+        uniform vec3 style2ColumnCenter;
+        attribute float sizes;
+        attribute float sizes2;
+        attribute vec4 shift;
+        attribute float threshold;
+        varying vec3 vColor;
 
-          ${shader.vertexShader}
-        `.replace(
-          `gl_PointSize = size;`,
-          `gl_PointSize = size * sizes;`
-        ).replace(
-          `#include <color_vertex>`,
-          `#include <color_vertex>
+        ${shader.vertexShader}
+    `.replace(
+        `#include <begin_vertex>`,
+        `#include <begin_vertex>
+
+            // Calculate target position for each style
+            vec3 targetPosition;
+            if (currentStyle < 0.5) {
+                targetPosition = style1ColumnCenter + vec3(sizes2*10.0, sizes * style1columnWidth, 0.0);
+            } else {
+                targetPosition = style2ColumnCenter + vec3(sizes2*10.0, sizes * style2columnWidth, 0.0);
+            }
+
+            // Interpolate between original and target positions
+            transformed = mix(transformed, targetPosition, columnTransitionProgress);
+        `
+    ).replace(
+        `#include <color_vertex>`,
+        `#include <color_vertex>
             float currentThreshold = mix(0.0, finalStyle2Ratio, transitionProgress);
             float currentStyle = step(threshold, currentThreshold);
 
             if (currentStyle < 0.5) {
-              vColor = vec3(1.0, 1.0, 1.0); // Style 1 color
+                vColor = vec3(1.0, 1.0, 1.0); // Style 1 color
             } else {
-              vColor = vec3(1.0, 0.0, 0.6); // Style 2 color (clustered)
+                vColor = vec3(1.0, 0.0, 0.6); // Style 2 color
             }
-          `
-        ).replace(
-          `#include <begin_vertex>`,
-          `#include <begin_vertex>
-            
-          `
-        );
+        `
+    );
 
         shader.fragmentShader = `
           varying vec3 vColor;
@@ -142,24 +174,108 @@ const SquareScene = () => {
     scene.add(nebula);
 
     const clock = new THREE.Clock();
+    let systemAdded = false;
 
     const animate = () => {
       controls.update();
       const t = clock.getElapsedTime() * 0.5;
       gu.time.value = t * Math.PI;
-
-      gu.transitionProgress.value = Math.min(1, gu.transitionProgress.value + 0.001);
-
+    
+      // Transition progress for changing color
+      if (clock.getElapsedTime() > 10 && gu.transitionProgress.value < 1) {
+        gu.transitionProgress.value = Math.min(1, gu.transitionProgress.value + 0.001);
+      }
+    
+      // Start moving to columns once all points have changed colors
+      if (gu.transitionProgress.value >= 1) {
+        if (!gu.moveStartTime) {
+          gu.moveStartTime = clock.getElapsedTime(); // Record the time when color change completes
+        }
+        const elapsedAfterColorChange = clock.getElapsedTime() - gu.moveStartTime;
+    
+        if (elapsedAfterColorChange > 10 && gu.columnTransitionProgress.value < 1) {
+          if (gu.columnTransitionProgress.value > 0 && scene.children.includes(xAxis)) {
+            scene.remove(xAxis, yAxis, zAxis);
+          }
+          gu.columnTransitionProgress.value = Math.min(1, gu.columnTransitionProgress.value + 0.001);
+        }
+      }
+      if (gu.columnTransitionProgress.value >= 1 && !systemAdded) {
+        addXYSystem();
+        systemAdded = true; // Ensure it is only added once
+      }
       renderer.render(scene, camera);
     };
+    
 
     renderer.setAnimationLoop(animate);
+
+
 
     // Add coordinate axes with the origin at the corner of the square
     const createAxisLine = (start, end, color) => {
       const material = new THREE.LineBasicMaterial({ color });
       const geometry = new THREE.BufferGeometry().setFromPoints([start, end]);
       return new THREE.Line(geometry, material);
+    };
+    
+    const createGridlinesXY = (size, divisions, color, opacity = 0.5) => {
+      const gridMaterial = new THREE.LineBasicMaterial({
+        color: color,
+        transparent: true,
+        opacity: opacity,
+      });
+    
+      const gridGeometry = new THREE.BufferGeometry();
+      const gridVertices = [];
+    
+      const step = size / divisions;
+    
+      // Create lines for positive X (horizontal lines along Y-axis)
+      for (let i = 0; i <= 2*divisions; i++) {
+        const y = i * step; // Step along positive Y
+        gridVertices.push(-size, y, 0); // Start of line
+        gridVertices.push(size, y, 0); // End of line
+      }
+    
+      // Create lines for positive Y (vertical lines along X-axis)
+      for (let i = -divisions; i <= divisions; i++) {
+        const x = i * step; // Step along positive X
+        gridVertices.push(x, 0, 0); // Start of line
+        gridVertices.push(x, 2*size, 0); // End of line
+      }
+    
+      gridGeometry.setAttribute(
+        "position",
+        new THREE.Float32BufferAttribute(gridVertices, 3)
+      );
+    
+      return new THREE.LineSegments(gridGeometry, gridMaterial);
+    };
+    
+    
+
+
+    const addXYSystem = () => {
+      // X-Axis (horizontal on x-y plane)
+      const xAxis = createAxisLine(
+        new THREE.Vector3(-50, 0, 0), // Start of the x-axis
+        new THREE.Vector3(100, 0, 0),  // End of the x-axis
+        0xffffff // White color
+      );
+      scene.add(xAxis);
+    
+      // Y-Axis (vertical on x-y plane)
+      const yAxis = createAxisLine(
+        new THREE.Vector3(-50, 0, 0), // Start of the y-axis
+        new THREE.Vector3(-50, 150, 0), // End of the y-axis
+        0xffffff // White color
+      );
+      scene.add(yAxis);
+    
+      // Gridlines on the X-Y plane
+      const gridXY = createGridlinesXY(50, 50, 0xffffff, 0.3); // Semi-transparent grid
+      scene.add(gridXY);
     };
 
     // Dimensions of the square (100 x 100 x 100, starting at the origin)
