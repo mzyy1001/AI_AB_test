@@ -19,7 +19,8 @@ const SquareScene = () => {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.enablePan = false;
-
+    controls.dampingFactor = 0.5;
+    controls.zoomSpeed = 0.05;
     const gu = {
       time: { value: 0 },
       transitionProgress: { value: 0 },
@@ -182,7 +183,7 @@ const SquareScene = () => {
       gu.time.value = t * Math.PI;
     
       // Transition progress for changing color
-      if (clock.getElapsedTime() > 10 && gu.transitionProgress.value < 1) {
+      if (clock.getElapsedTime() > 20 && gu.transitionProgress.value < 1) {
         gu.transitionProgress.value = Math.min(1, gu.transitionProgress.value + 0.001);
       }
     
@@ -193,7 +194,7 @@ const SquareScene = () => {
         }
         const elapsedAfterColorChange = clock.getElapsedTime() - gu.moveStartTime;
     
-        if (elapsedAfterColorChange > 10 && gu.columnTransitionProgress.value < 1) {
+        if (elapsedAfterColorChange > 30 && gu.columnTransitionProgress.value < 1) {
           if (gu.columnTransitionProgress.value > 0 && scene.children.includes(xAxis)) {
             scene.remove(xAxis, yAxis, zAxis);
           }
