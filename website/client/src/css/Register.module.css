@@ -1,93 +1,199 @@
-/* Register.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
 
+/* General Styles */
 .body {
-    font-family: Arial, sans-serif;
+    font-family: 'Playfair Display', serif;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
     height: 100vh;
-    background-color: #121212; /* Dark background color */
 }
 
-.container {
-    text-align: center;
-    padding: 20px 30px;
-    border-radius: 12px;
-    background-color: #1e1e1e; /* Slightly lighter background */
+/* Header Styles */
+.header {
     width: 100%;
-    max-width: 325px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* Dark shadow */
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    position: absolute;
+    left: 4%;
+    top: 45px;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.arrow {
+    position: absolute;
+    top: 16%;
+    width: 70%;
+    height: 10%;
+    background-color: #5b5b5b;
+    animation: arrow 700ms linear infinite;
+    border-radius: 1px;
+}
+
+.arrow::after,
+.arrow::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    left: -9%;
+    background-color: #5b5b5b;
+}
+
+.arrow::after {
+    top: -133%;
+    transform: rotate(135deg);
+}
+
+.arrow::before {
+    top: 133%;
+    transform: rotate(45deg);
+}
+
+.grayDot {
+    width: 40px;
+    /* Larger size */
+    height: 40px;
+    /* Larger size */
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+/* Gray Cutoff Line */
+.cutoffLine {
+    height: 2px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+}
+
+.headerTitle {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .heading {
-    text-align: left;
-    font-family: 'Poppins', sans-serif;
-    font-size: 24px;
-    margin-bottom: 45px;
-    margin-top: 35px;
-    margin-left: 15px;
-    color: #ffffff;
+    font-size: 28px;
+    margin: 0;
+    color: #333333;
 }
 
-.paragraph {
+.subtitle {
     font-size: 16px;
-    color: #bbbbbb;
-    margin: 10px 0 20px;
-}
-
-.input {
-    width: 90%;
-    padding: 14px;
-    margin-bottom: 20px;
-    border: 2px solid #363636; /* Border color */
-    border-radius: 6px;
-    font-size: 14px;
-    background-color: #111111; /* Dark input background */
-    color: #ffffff; /* White text */
-    box-sizing: border-box;
-}
-
-.input::placeholder {
-    color: #888888; /* Placeholder text color */
-}
-
-.button {
-    width: 90%;
-    padding: 12px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    background-color: #ffffff;
-    color: #000000;
-    font-family: 'Roboto', sans-serif; /* Or another guessed font */
-    font-size: 14px;
-    font-weight: 400; /* Medium weight */
-    text-transform: uppercase; /* Capitalizes the text like in the image */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.button:hover {
-    background-color: #f0f0f0; /* Slight hover effect */
-}
-
-.button:disabled {
-    background-color: #555555; /* Disabled state color */
-    cursor: not-allowed;
+    color: #555555;
 }
 
 .link {
-    font-size: 14px;
-    color: #888888;
+    color: #007bff;
     text-decoration: none;
 }
 
 .link:hover {
-    color: #ffffff; /* Highlight link on hover */
     text-decoration: underline;
+}
+
+/* Step Tracker */
+.stepTracker {
+    display: flex;
+    justify-content: space-between;
+    width: 280px;
+    margin-bottom: 30px;
+}
+
+.step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #dddddd;
+    color: #555555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.activeStep {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+/* Form */
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input {
+    width: 280px;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #333333;
+    box-sizing: border-box;
+}
+
+.input::placeholder {
+    color: #aaaaaa;
+}
+
+/* Buttons */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    width: 280px;
+}
+
+.buttonPrimary {
+    background-color: #007bff;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttonPrimary:hover {
+    background-color: #0056b3;
+}
+
+.buttonSecondary {
+    background-color: #dddddd;
+    color: #555555;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buttonSecondary:hover {
+    background-color: #cccccc;
+}
+
+.disabled {
+    background-color: #aaaaaa;
+    color: #eeeeee;
+    cursor: not-allowed;
 }
 
 .errorBanner {
