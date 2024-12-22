@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom for navigation
+import { Link } from 'react-router-dom';
 import styles from '../css/UserPage.module.css';
 
 function UserPage() {
@@ -95,77 +95,70 @@ function UserPage() {
   };
 
   return (
-    <div className={styles.body}>
-      {/* Updated Header Section */}
+    <div className={styles.pageContainer}>
+      {/* Header with back arrow, dot, and gray cutoff line */}
       <header className={styles.header}>
-        <h1 className={styles.labTitle}>AI_LAB_TEST</h1>
-        <div className={styles.underline}></div>
-        <h2 className={styles.mainTitle}>Advanced AI Testing Platform</h2>
-        <p className={styles.subtitle}>
-          A sophisticated platform for conducting A/B tests using AI models. Upload videos or submit URLs for analysis.
-        </p>
+        <div className={styles.icon}>
+          <Link to="/" className={styles.arrow}></Link>
+        </div>
+        <span className={styles.grayDot}></span>
       </header>
+      <div className={styles.cutoffLine}></div>
 
-      {/* Upload Section */}
-      <div className={styles.uploadContainer}>
-        <h1>Upload File or Submit URL</h1>
-        <p>Remaining Usage Count: {usageCount}</p>
-
-        {/* "Go Recharge" Link */}
-        {usageCount <= 0 && (
-          <Link to="/recharge" className={styles.rechargeLink}>Go Recharge</Link>
-        )}
-
-        <form onSubmit={handleFileUpload} className={styles.uploadForm}>
-          <div className={styles.fileInput}>
+      <div className={styles.body}>
+        {/* File and URL upload section */}
+        <div className={styles.uploadSection}>
+          <form onSubmit={handleFileUpload} className={styles.uploadForm}>
             <label className={styles.fileLabel}>
-              <input type="file" onChange={handleFileChange} />
               Drag and drop files here or click to browse
+              <input type="file" onChange={handleFileChange} />
+              <button type="submit" className={styles.uploadButton}>Upload File</button>
             </label>
-          </div>
-          {progress > 0 && <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>}
-          <button type="submit" className={styles.uploadButton}>Upload File</button>
-        </form>
-        <form onSubmit={handleUrlUpload} className={styles.uploadForm}>
-          <input
-            type="url"
-            placeholder="Enter URL"
-            value={url}
-            onChange={handleUrlChange}
-            className={styles.urlInput}
-          />
-          <button type="submit" className={styles.uploadButton}>Submit URL</button>
-        </form>
-      </div>
+            {progress > 0 && <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>}
+            
+          </form>
 
-      {/* History Section */}
-      <div className={styles.historySection}>
-        {history.length > 0 ? (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>File/URL Name</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Upload Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.filename}</td>
-                  <td>{item.type}</td>
-                  <td>{item.status}</td>
-                  <td>{new Date(item.uploadDate).toLocaleDateString()}</td>
+          <form onSubmit={handleUrlUpload} className={styles.uploadForm}>
+            <input
+              type="url"
+              placeholder="Enter URL"
+              value={url}
+              onChange={handleUrlChange}
+              className={styles.urlInput}
+            />
+            <button type="submit" className={styles.uploadButton}>Submit URL</button>
+          </form>
+        </div>
+
+        {/* History Table */}
+        <div className={styles.historySection}>
+          {history.length > 0 ? (
+            <table className={styles.table}>
+              <thead>
+                <tr className={styles.tableHeader}>
+                  <th>ID</th>
+                  <th>File/URL Name</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Upload Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className={styles.noHistory}>No history available.</p>
-        )}
+              </thead>
+              <tbody>
+                {history.map((item) => (
+                  <tr key={item.id} className={styles.tableRow}>
+                    <td>{item.id}</td>
+                    <td>{item.filename}</td>
+                    <td>{item.type}</td>
+                    <td>{item.status}</td>
+                    <td>{new Date(item.uploadDate).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className={styles.noHistory}>No history available.</p>
+          )}
+        </div>
       </div>
     </div>
   );

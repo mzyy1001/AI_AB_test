@@ -1,218 +1,166 @@
-/* UserPage.module.css */
-
-.body {
-    background-color: #121212;
-    /* Dark mode background */
-    color: white;
-    height: 150%;
-    padding: 20px;
-    font-family: Arial, sans-serif;
+/* General Body Styling */
+.pageContainer {
+    background-color: #ffffff;
+    color: #333;
+    font-family: 'Playfair Display', serif;
+    max-width: 100%;
 }
 
-/* Header Styling */
+/* Header */
 .header {
-    text-align: center;
-    margin-bottom: 40px;
-    position: relative;
-    padding-left: 20px;
-    /* Left padding for aligning "AI_LAB_TEST" */
-}
-
-.labTitle {
-    font-size: 1.2rem;
-    color: #ffffff;
-    text-transform: uppercase;
-    font-weight: bold;
-    margin: 0;
-    text-align: left;
-    /* Align left */
-    letter-spacing: 1.5px;
-}
-
-.underline {
-    width: 100vw - 20px;
-    /* Adjust width as needed */
-    height: 2px;
-    background-color: #ffffff10;
-    margin: 10px 0 30px 0;
-    /* Spacing between titles */
-    margin-left: 0;
-    /* Left align the underline */
-}
-
-.mainTitle {
-    font-size: 3rem;
-    color: #ffffff;
-    font-weight: 700;
-    margin: 120px 0 30px 0;
-}
-
-.subtitle {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.5;
-}
-
-/* Recharge Link Styling */
-.rechargeLink {
-    color: #4CAF50; /* Green color for the link */
-    text-decoration: underline;
-    display: block;
-    margin-top: 10px; /* Space between usage count and link */
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center; /* Center the link for consistency */
-  }
-  
-  .rechargeLink:hover {
-    color: #45a049; /* Darker green on hover */
-  }
-  
-
-.uploadContainer {
-    background-color: #1e1e1e;
-    border-radius: 20px;
-    padding: 30px;
-    margin: 30px auto;
-    width: 50%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-    text-align: center;
-}
-
-.uploadContainer h1 {
-    font-size: 1.8rem;
-    color: white;
-    margin-bottom: 10px;
-}
-
-.uploadContainer p {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 20px;
-}
-
-.uploadSection {
-    margin-bottom: 40px;
-}
-
-h1,
-h2 {
-    color: white;
-    margin-bottom: 10px;
-}
-
-.uploadForm {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 40px;
-}
-
-.fileInput {
-    position: relative;
-    border: 2px dashed rgba(255, 255, 255, 0.1);
-    background-color: #272727;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    height: 30vh;
+    width: 100%;
+    padding: 15px 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
 }
 
-
-.fileLabel {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 16px;
+.icon {
+    position: absolute;
+    left: 4%;
+    top: 45px;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 }
 
-.fileInput input {
+.arrow {
+    position: absolute;
+    top: 16%;
+    width: 70%;
+    height: 10%;
+    background-color: #5b5b5b;
+    animation: arrow 700ms linear infinite;
+    border-radius: 1px;
+}
+
+.arrow::after,
+.arrow::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    left: -9%;
+    background-color: #5b5b5b;
+}
+
+.arrow::after {
+    top: -133%;
+    transform: rotate(135deg);
+}
+
+.arrow::before {
+    top: 133%;
+    transform: rotate(45deg);
+}
+
+.grayDot {
+    width: 40px;
+    /* Larger size */
+    height: 40px;
+    /* Larger size */
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+/* Gray Cutoff Line */
+.cutoffLine {
+    height: 2px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+}
+
+/* Upload Section */
+.body {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 85%;
+}
+
+.uploadSection {
+    margin: 30px 0;
+}
+
+.fileLabel {
+    border: 3px dashed #ddd;
+    padding: 20px;
+    display: block;
+    margin: 20px 0;
+    text-align: center;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fileLabel input {
     display: none;
 }
 
 .urlInput {
     padding: 10px;
+    border: 2px solid #d9d9d9;
     border-radius: 5px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    background-color: #0f0f0f;
-    color: white;
+    width: 66%;
+    margin: 10px 0;
+    font-family: 'Playfair Display', serif;
 }
 
 .uploadButton {
-    background-color: white;
-    color: black;
-    padding: 10px 20px;
+    background-color: #202d3c;
+    color: #fff;
     border: none;
+    padding: 10px 20px;
+    margin-left: 20px;
     border-radius: 5px;
     cursor: pointer;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: 'Playfair Display', serif;
     text-transform: uppercase;
-    transition: background-color 0.3s;
 }
 
 .uploadButton:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: #555;
 }
 
+/* History Section */
 .historySection {
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    margin: 30px auto;
-    width: 90%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-    text-align: center;
+    margin: 20px 0;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 3px 3px 1px rgba(0, 0, 0, 0.1);
+    /* Backdrop shadow */
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
+    font-family: 'Playfair Display', serif;
 }
 
 .table td {
     text-align: left;
     padding: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
 }
 
 .table th {
     text-align: left;
-    padding: 20px;
-    color: rgba(255, 255, 255, 0.5);
-    font-family: 'Roboto', sans-serif;
-    /* Or another guessed font */
+    padding: 15px 20px;
+    color: rgba(0, 0, 0, 0.5);
+    font-family: 'Playfair Display', serif;
     font-size: 15px;
-    font-weight: 600;
-    /* Medium weight */
+    font-weight: 400;
     text-transform: uppercase;
-    /* Capitalizes the text like in the image */
-
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-.table tr:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+.tableRow:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .noHistory {
+    color: #999;
     text-align: center;
-    align-content: center;
-    height: 50px;
+    margin-top: 20px;
 }
-
-.progressBar {
-    height: 5px;
-    background-color: limegreen;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-/* Existing styles... */
