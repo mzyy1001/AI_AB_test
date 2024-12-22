@@ -1,16 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap');
 
 /* General Styles */
-.body {
+.pageContainer {
+    background-color: #ffffff;
+    color: #333;
     font-family: 'Playfair Display', serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #f9f9f9;
-    height: 100vh;
+    max-width: 100%;
 }
 
 /* Header Styles */
@@ -78,55 +73,107 @@
     margin-bottom: 20px;
 }
 
+.body {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    height: 100vh;
+}
+
+/* Header Title */
 .headerTitle {
     text-align: center;
     margin-bottom: 40px;
 }
 
 .heading {
-    font-size: 28px;
-    margin: 0;
+    font-size: 32px;
     color: #333333;
+    margin-bottom: 0;
 }
 
 .subtitle {
     font-size: 16px;
     color: #555555;
+    margin-top: 0;
 }
 
 .link {
-    color: #007bff;
-    text-decoration: none;
+    color: #000000;
+    text-decoration: underline;
 }
 
 .link:hover {
-    text-decoration: underline;
+    color: #555555;
 }
 
 /* Step Tracker */
 .stepTracker {
     display: flex;
-    justify-content: space-between;
-    width: 280px;
-    margin-bottom: 30px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.stepItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-right: 80px;
+    /* Space between step items */
+}
+
+.stepItem:last-child {
+    margin-right: 0;
+}
+
+/* Gray line between steps */
+.stepItem:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 61%;
+    width: 125%;
+    height: 1px;
+    background-color: #ccc;
+    transform: translateY(-50%);
 }
 
 .step {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background-color: #dddddd;
     color: #555555;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
 }
 
+.stepSubtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555555;
+}
+
 .activeStep {
-    background-color: #007bff;
+    /* Step bubble becomes black with white text */
+    background-color: #000000;
     color: #ffffff;
+}
+
+.activeSubtitle {
+    /* Step subtitle if active becomes fully black */
+    color: #000000;
 }
 
 /* Form */
@@ -136,57 +183,50 @@
     align-items: center;
 }
 
-.input {
-    width: 280px;
-    padding: 12px;
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 20px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #ffffff;
-    color: #333333;
-    box-sizing: border-box;
+}
+
+.input {
+    width: 650px;
+    height: 20px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-family: 'Playfair Display', serif;
+    padding: 10px;
 }
 
 .input::placeholder {
     color: #aaaaaa;
 }
 
+/* Label above textfields */
+.inputComment {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #333333;
+}
+
 /* Buttons */
 .actions {
     display: flex;
     justify-content: space-between;
-    width: 280px;
+    width: 670px;
 }
 
 .buttonPrimary {
-    background-color: #007bff;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    width: 670px;
+    text-align: center;
+    border-radius: 40px;
+    padding: 12px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
 }
 
 .buttonPrimary:hover {
-    background-color: #0056b3;
-}
-
-.buttonSecondary {
-    background-color: #dddddd;
-    color: #555555;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.buttonSecondary:hover {
     background-color: #cccccc;
 }
 
@@ -194,26 +234,29 @@
     background-color: #aaaaaa;
     color: #eeeeee;
     cursor: not-allowed;
+    border: none;
 }
+
 
 .errorBanner {
     position: fixed;
-    top: 20px;
+    top: 85px;
     left: 10%;
     width: 80%;
-    background-color: rgba(255, 81, 81, 0.514); /* Red background for error */
+    background-color: rgba(255, 81, 81, 0.514);
     border-radius: 5px;
     color: white;
     padding: 10px 0;
     text-align: center;
     font-size: 18px;
-    z-index: 1000; /* Ensures the banner is on top of other content */
-    opacity: 1; /* Initially visible */
-    transition: opacity 0.5s ease-out; /* Adding transition */
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
 }
 
 .errorBanner.fadeOut {
-    opacity: 0; /* Fade the banner */
+    opacity: 0;
+    /* Fade the banner */
 }
 
 .errorContent {
@@ -235,5 +278,3 @@
     font-size: 24px;
     cursor: pointer;
 }
-
-

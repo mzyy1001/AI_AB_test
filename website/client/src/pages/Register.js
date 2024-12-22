@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../css/Register.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [currentStep, setCurrentStep] = useState(1); // State to track the current step
@@ -13,16 +13,18 @@ function Register() {
 
     const isNameValid = name.trim().length > 0; // Validate name
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Validate email
-    const isPasswordValid = password.length >= 6; // Validate password length (at least 6 characters)
+    const isPasswordValid = password.length >= 0; // Validate password length (at least 6 characters)
+    const navigate = useNavigate();
 
     const handleNextStep = () => {
-        if (currentStep === 1 && !isNameValid) {
-            setErrorMessage('Please enter your name.');
+        // CHANGED: Validate email on step 1, and name on step 2
+        if (currentStep === 1 && !isEmailValid) {
+            setErrorMessage('Please enter a valid email.');
             setIsError(true);
             return;
         }
-        if (currentStep === 2 && !isEmailValid) {
-            setErrorMessage('Please enter a valid email.');
+        if (currentStep === 2 && !isNameValid) {
+            setErrorMessage('Please enter your name.');
             setIsError(true);
             return;
         }
@@ -78,121 +80,139 @@ function Register() {
     }, [isError]);
 
     return (
-
-        <div className={styles.body}>
+        <div className={styles.pageContainer}>
             <header className={styles.header}>
-                <div className={styles.icon}>
-                    <Link to="/" className={styles.arrow}></Link>
+                <div
+                    className={styles.icon}
+                    onClick={() => {
+                        if (currentStep === 1) {
+                            navigate('/');
+                        } else {
+                            handlePrevStep();
+                        }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <Link className={styles.arrow}></Link>
                 </div>
                 <span className={styles.grayDot}></span>
             </header>
             <div className={styles.cutoffLine}></div>
-            {/* Header */}
-            <header className={styles.headerTitle}>
-                <h1 className={styles.heading}>Create an account</h1>
-                <p className={styles.subtitle}>
-                    Already have an account? <a href="/login" className={styles.link}>Log in here</a>.
-                </p>
-            </header>
+            <div className={styles.body}>
+                {/* Header */}
+                <header className={styles.headerTitle}>
+                    <h1 className={styles.heading}>Create an account</h1>
+                    <p className={styles.subtitle}>
+                        Already have an account? <a href="/login" className={styles.link}>Log in</a>.
+                    </p>
+                </header>
 
-            {/* Step Tracker */}
-            <div className={styles.stepTracker}>
-                <span className={`${styles.step} ${currentStep === 1 ? styles.activeStep : ''}`}>1</span>
-                <span className={`${styles.step} ${currentStep === 2 ? styles.activeStep : ''}`}>2</span>
-                <span className={`${styles.step} ${currentStep === 3 ? styles.activeStep : ''}`}>3</span>
-            </div>
+                {/* Step Tracker */}
+                <div className={styles.stepTracker}>
+                    <div className={styles.stepItem}>
+                        <span className={`${styles.step} ${currentStep === 1 ? styles.activeStep : ''}`}>1</span>
+                        <p className={`${styles.stepSubtitle} ${currentStep === 1 ? styles.activeSubtitle : ''}`}>
+                            Enter your email address
+                        </p>
+                    </div>
+                    <div className={styles.stepItem}>
+                        <span className={`${styles.step} ${currentStep === 2 ? styles.activeStep : ''}`}>2</span>
+                        <p className={`${styles.stepSubtitle} ${currentStep === 2 ? styles.activeSubtitle : ''}`}>
+                            Provide your basic info
+                        </p>
+                    </div>
+                    <div className={styles.stepItem}>
+                        <span className={`${styles.step} ${currentStep === 3 ? styles.activeStep : ''}`}>3</span>
+                        <p className={`${styles.stepSubtitle} ${currentStep === 3 ? styles.activeSubtitle : ''}`}>
+                            Create your password
+                        </p>
+                    </div>
+                </div>
 
-            {/* Form Content */}
-            <form onSubmit={handleRegister} className={styles.form}>
-                {currentStep === 1 && (
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className={styles.input}
-                            required
-                        />
-                    </div>
-                )}
-                {currentStep === 2 && (
-                    <div>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className={styles.input}
-                            required
-                        />
-                    </div>
-                )}
-                {currentStep === 3 && (
-                    <div>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className={styles.input}
-                            required
-                        />
-                    </div>
-                )}
-
-                {/* Navigation Buttons */}
-                <div className={styles.actions}>
-                    {currentStep > 1 && (
-                        <button
-                            type="button"
-                            onClick={handlePrevStep}
-                            className={styles.buttonSecondary}
-                        >
-                            Back
-                        </button>
+                {/* Form Content */}
+                <form onSubmit={handleRegister} className={styles.form}>
+                    {currentStep === 1 && (
+                        <div className={styles.inputContainer}>
+                            <label className={styles.inputComment}>What's your email?</label>
+                            <input
+                                type="email"
+                                placeholder="Enter your email address"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className={styles.input}
+                                required
+                            />
+                        </div>
                     )}
-                    {currentStep < 3 && (
-                        <button
-                            type="button"
-                            onClick={handleNextStep}
-                            className={`${styles.buttonPrimary} ${(currentStep === 1 && !isNameValid) ||
-                                    (currentStep === 2 && !isEmailValid)
-                                    ? styles.disabled
-                                    : ''
-                                }`}
-                            disabled={
-                                (currentStep === 1 && !isNameValid) ||
-                                (currentStep === 2 && !isEmailValid)
-                            }
-                        >
-                            Next
-                        </button>
+                    {currentStep === 2 && (
+                        <div className={styles.inputContainer}>
+                            <label className={styles.inputComment}>Company name</label>
+                            <input
+                                type="text"
+                                placeholder="Enter your company name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className={styles.input}
+                                required
+                            />
+                        </div>
                     )}
                     {currentStep === 3 && (
-                        <button
-                            type="submit"
-                            className={`${styles.buttonPrimary} ${!isPasswordValid ? styles.disabled : ''
-                                }`}
-                            disabled={!isPasswordValid}
-                        >
-                            Register
-                        </button>
+                        <div className={styles.inputContainer}>
+                            <label className={styles.inputComment}>Create password</label>
+                            <input
+                                type="password"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className={styles.input}
+                                required
+                            />
+                        </div>
                     )}
-                </div>
-            </form>
 
-            {/* Error Banner */}
-            {isError && (
-                <div className={`${styles.errorBanner} ${fade ? styles.fadeOut : ''}`}>
-                    <div className={styles.errorContent}>
-                        <p className={styles.errorMessage}>{errorMessage}</p>
-                        <button onClick={closeBanner} className={styles.closeButton}>
-                            &times;
-                        </button>
+                    {/* CHANGED: Removed Back button */}
+                    <div className={styles.actions}>
+                        {currentStep < 3 && (
+                            <button
+                                type="button"
+                                onClick={handleNextStep}
+                                className={`${styles.buttonPrimary} ${(currentStep === 1 && !isEmailValid) ||
+                                    (currentStep === 2 && !isNameValid)
+                                    ? styles.disabled
+                                    : ''}`}
+                                disabled={
+                                    (currentStep === 1 && !isEmailValid) ||
+                                    (currentStep === 2 && !isNameValid)
+                                }
+                            >
+                                Next
+                            </button>
+                        )}
+                        {currentStep === 3 && (
+                            <button
+                                type="submit"
+                                className={`${styles.buttonPrimary} ${!isPasswordValid ? styles.disabled : ''}`}
+                                disabled={!isPasswordValid}
+                            >
+                                Register
+                            </button>
+                        )}
                     </div>
-                </div>
-            )}
+                </form>
+
+                {/* Error Banner */}
+                {isError && (
+                    <div className={`${styles.errorBanner} ${fade ? styles.fadeOut : ''}`}>
+                        <div className={styles.errorContent}>
+                            <p className={styles.errorMessage}>{errorMessage}</p>
+                            <button onClick={closeBanner} className={styles.closeButton}>
+                                &times;
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
