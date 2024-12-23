@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../css/Login.module.css';
+import showPasswordIcon from '../logos/show-password.png';
+import hidePasswordIcon from '../logos/hide-password.png';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [isError, setIsError] = useState(false); // State to manage modal visibility for errors
     const [errorMessage, setErrorMessage] = useState(''); // Store the error message
     const [fade, setFade] = useState(false); // State to control fade effect
@@ -26,7 +29,7 @@ function Login() {
             setIsError(true); // Show error modal
         }
     };
-    
+
     const closeBanner = () => {
         setFade(true); // Trigger the fade-out effect
         setTimeout(() => setIsError(false), 1000); // Hide the banner after the fade-out duration
@@ -44,43 +47,86 @@ function Login() {
     }, [isError]);
 
     return (
-        <div className={styles.body}>
-            <div className={styles.container}>
-                <h1 className={styles.heading}>Login</h1>
+        <div className={styles.pageContainer}>
+            {/* Header with back arrow, dot, and gray cutoff line */}
+            <header className={styles.header}>
+                <div className={styles.icon}>
+                    <Link to="/" className={styles.arrow}></Link>
+                </div>
+                <span className={styles.grayDot}></span>
+            </header>
+            <div className={styles.cutoffLine}></div>
+
+            <div className={styles.body}>
+                <h1 className={styles.heading}>Log in</h1>
+
                 <form onSubmit={handleLogin}>
+                    <label className={styles.label} htmlFor="email">
+                        Email address or user name
+                    </label>
                     <input
                         type="email"
-                        placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         className={styles.input}
                     />
+
+                    <label className={styles.passwordLabelRow}>
+                        Password
+                        <span
+                            className={styles.togglePassword}
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            <img
+                                src={showPassword ? showPasswordIcon : hidePasswordIcon}
+                                alt={showPassword ? "Show icon" : "Hide icon"}
+                                className={styles.passwordIcon}
+                            />
+                            {showPassword ? "Show" : "Hide"}
+                        </span>
+                    </label>
                     <input
-                        type="password"
-                        placeholder="Password"
+                        type={showPassword ? "text" : "password"}
+                        className={styles.input}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className={styles.input}
                     />
-                    <button type="submit" className={styles.button}>Login</button>
-                </form>
-                <p className={styles.paragraph}>
-                    Don't have an account? <Link to="/register" className={styles.link}>Register here</Link>
-                </p>
-            </div>
 
-            {isError && (
-                <div className={`${styles.errorBanner} ${fade ? styles.fadeOut : ''}`}>
-                    <div className={styles.errorContent}>
-                        <p className={styles.errorMessage}>{errorMessage}</p>
-                        <button onClick={closeBanner} className={styles.closeButton}>
-                            &times;
-                        </button>
+                    <p className={styles.label}>
+                        By continuing, you agree to our Terms of Policy and Private Policy
+                    </p>
+
+                    <button type="submit" className={styles.button}>
+                        Login
+                    </button>
+
+                </form>
+
+                <p className={`${styles.paragraph} ${styles.paragraphCenter}`}>
+                    <Link to="/forgetpassword" className={styles.link}>
+                        Forget your password
+                    </Link>
+                </p>
+                <p className={`${styles.paragraph} ${styles.paragraphCenter}`}>
+                    Don't have an account?{' '}
+                    <Link to="/register" className={styles.link}>
+                        Register here
+                    </Link>
+                </p>
+
+                {isError && (
+                    <div className={`${styles.errorBanner} ${fade ? styles.fadeOut : ''}`}>
+                        <div className={styles.errorContent}>
+                            <p className={styles.errorMessage}>{errorMessage}</p>
+                            <button onClick={closeBanner} className={styles.closeButton}>
+                                &times;
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

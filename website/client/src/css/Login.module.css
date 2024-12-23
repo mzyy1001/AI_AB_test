@@ -1,34 +1,105 @@
 /* Register.module.css */
 
-.body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh;
-    background-color: #121212; /* Dark background color */
+/* General Styles */
+.pageContainer {
+    background-color: #ffffff;
+    color: #333;
+    font-family: 'Playfair Display', serif;
+    max-width: 100%;
 }
 
-.container {
-    text-align: center;
-    padding: 20px 30px;
-    border-radius: 12px;
-    background-color: #1e1e1e; /* Slightly lighter background */
+/* Header Styles */
+.header {
     width: 100%;
-    max-width: 325px;
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4); /* Dark shadow */
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    position: absolute;
+    left: 4%;
+    top: 45px;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.arrow {
+    position: absolute;
+    top: 16%;
+    width: 70%;
+    height: 10%;
+    background-color: #5b5b5b;
+    animation: arrow 700ms linear infinite;
+    border-radius: 1px;
+}
+
+.arrow::after,
+.arrow::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    left: -9%;
+    background-color: #5b5b5b;
+}
+
+.arrow::after {
+    top: -133%;
+    transform: rotate(135deg);
+}
+
+.arrow::before {
+    top: 133%;
+    transform: rotate(45deg);
+}
+
+.grayDot {
+    width: 40px;
+    /* Larger size */
+    height: 40px;
+    /* Larger size */
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+/* Gray Cutoff Line */
+.cutoffLine {
+    height: 2px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+}
+
+.body {
+    font-family: 'Playfair Display', serif;
+    margin: 0 auto;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    height: 100vh;
+    width: 38%;
 }
 
 .heading {
+    width: 100%;
     text-align: left;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Playfair Display', sans-serif;
     font-size: 24px;
-    margin-bottom: 45px;
-    margin-top: 35px;
-    margin-left: 15px;
-    color: #ffffff;
+    color: #000000;
+    margin-bottom: 20px;
+    margin-top: 60px;
+}
+
+.label {
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    color: #333;
 }
 
 .paragraph {
@@ -38,76 +109,91 @@
 }
 
 .input {
-    width: 90%;
+    width: 92%;
     padding: 14px;
-    margin-bottom: 20px;
-    border: 2px solid #363636; /* Border color */
     border-radius: 6px;
     font-size: 14px;
-    background-color: #111111; /* Dark input background */
-    color: #ffffff; /* White text */
-    box-sizing: border-box;
+    border: 2px solid #ccc;
+    background-color: #fff;
+    margin-bottom: 20px;
+    margin-top: 7px;
 }
 
 .input::placeholder {
-    color: #888888; /* Placeholder text color */
+    color: #aaaaaa;
+}
+
+.passwordLabelRow {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    width: 100%;
+    color: #333;
+    justify-content: space-between; /* keep them on the same line */
+}
+
+.togglePassword {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    padding-left: 10px;
+    color: #555555;
+}
+
+.passwordIcon {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
 }
 
 .button {
-    width: 90%;
-    padding: 12px;
-    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    border-radius: 40px;
+    padding: 12px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
     margin-bottom: 20px;
-    background-color: #ffffff;
-    color: #000000;
-    font-family: 'Roboto', sans-serif; /* Or another guessed font */
-    font-size: 14px;
-    font-weight: 400; /* Medium weight */
-    text-transform: uppercase; /* Capitalizes the text like in the image */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .button:hover {
-    background-color: #f0f0f0; /* Slight hover effect */
-}
-
-.button:disabled {
-    background-color: #555555; /* Disabled state color */
-    cursor: not-allowed;
+    background-color: #cccccc;
 }
 
 .link {
-    font-size: 14px;
-    color: #888888;
-    text-decoration: none;
+    color: #000000;
+    text-decoration: underline;
 }
 
 .link:hover {
-    color: #ffffff; /* Highlight link on hover */
-    text-decoration: underline;
+    color: #555555;
+}
+
+.paragraphCenter {
+    text-align: center;
 }
 
 .errorBanner {
     position: fixed;
-    top: 20px;
+    top: 85px;
     left: 10%;
     width: 80%;
-    background-color: rgba(255, 81, 81, 0.514); /* Red background for error */
+    background-color: rgba(255, 81, 81, 0.514);
     border-radius: 5px;
     color: white;
     padding: 10px 0;
     text-align: center;
     font-size: 18px;
-    z-index: 1000; /* Ensures the banner is on top of other content */
-    opacity: 1; /* Initially visible */
-    transition: opacity 0.5s ease-out; /* Adding transition */
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
 }
 
 .errorBanner.fadeOut {
-    opacity: 0; /* Fade the banner */
+    opacity: 0;
 }
 
 .errorContent {

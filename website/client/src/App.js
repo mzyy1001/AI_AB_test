@@ -8,6 +8,7 @@ import UserPage from './pages/UserPage';
 import AdminLogin from './pages/AdminLogin';
 import RechargePage from './pages/ReChargePage';
 import SceneS from './pages/OneNebulaScene';
+import SuccessPage from './pages/Success';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/recharge" element={<RechargePage />} />
                 <Route path="/admin-login" element={<AdminLogin />} />
                 <Route path='/scene' element={<SceneS />} />
+                <Route path='/successPage' element={<SuccessPage />} />
             </Routes>
         </Router>
     );
