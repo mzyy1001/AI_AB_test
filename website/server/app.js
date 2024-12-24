@@ -12,6 +12,7 @@ const cors = require('cors');
 const db = require('./database/db'); // Import your database configuration
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const surveyRouter = require('./routes/survey');
 
 const app = express();
 
@@ -44,6 +45,7 @@ require('./config/passport')(passport); // Passport configuration
 
 // Route configurations
 app.use('/', indexRouter); // Root routes
+app.use('/survey', surveyRouter); // Survey routes
 app.use('/users', usersRouter); // User routes
 
 // Error handling middleware

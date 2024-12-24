@@ -48,10 +48,20 @@ db.serialize(() => {
     username TEXT,
     password TEXT,
     usageCount INTEGER DEFAULT 0,
-    date TEXT DEFAULT (datetime('now'))
+    date TEXT DEFAULT (datetime('now')),
+    firstName TEXT,
+    lastName TEXT,
+    company TEXT,
+    jobTitle TEXT,
+    phone TEXT,
+    country TEXT,
+    productsInterested TEXT
   )`, (err) => {
-    if (err) console.error('Failed to create users table:', err.message);
-    else console.log('Users table ready');
+    if (err) {
+      console.error('Failed to create users table:', err.message);
+    } else {
+      console.log('Users table ready with additional columns');
+    }
   });
 
   db.run(`CREATE TABLE IF NOT EXISTS surveys (
