@@ -41,7 +41,7 @@ function Admin() {
 
   const fetchSurveys = async () => {
     try {
-      const response = await axios.get('/users/surveys');
+      const response = await axios.get('/survey');
       setSurveys(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
