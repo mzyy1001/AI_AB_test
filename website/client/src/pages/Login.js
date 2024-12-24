@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../css/Login.module.css';
-import showPasswordIcon from '../logos/show-password.png';
-import hidePasswordIcon from '../logos/hide-password.png';
+import showPasswordIcon from '../public/show-password.png';
+import hidePasswordIcon from '../public/hide-password.png';
 
 function Login() {
     const [email, setEmail] = useState('');

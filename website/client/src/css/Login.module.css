@@ -117,6 +117,7 @@
     background-color: #fff;
     margin-bottom: 20px;
     margin-top: 7px;
+    font-family: 'Playfair Display', serif;
 }
 
 .input::placeholder {
