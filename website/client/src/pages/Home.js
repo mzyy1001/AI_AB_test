@@ -43,7 +43,10 @@ function Home() {
             <section className={styles.headingSection}>
                 <div className={styles.headingContainer}>
                     <h1 className={styles.mainHeading}>Fifteen.</h1>
-                    <p className={styles.subHeading1}>Advertising placement strategy real-time testing for MAXROI</p>
+                    <p className={styles.subHeading1}>
+                        <p>Advertising placement strategy real-time testing for</p> 
+                        <p className={styles.maxroi}>MAX ROI</p>
+                    </p>
                     <p className={styles.subHeading2}>Million+ Al agent market mirroring | Unstructured living data</p>
                     <div className={styles.headingBtns}>
                         <a href="/" className={styles.headingBtn}>STRATEGY VERIFICATION</a>

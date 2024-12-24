@@ -1,4 +1,7 @@
+/* UserPage.module.css */
 /* General Body Styling */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:display=swap');
+
 .pageContainer {
     background-color: #ffffff;
     color: #333;

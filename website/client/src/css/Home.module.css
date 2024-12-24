@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -36,7 +38,7 @@ body {
 }
 
 .btnGetStarted {
-    background: #000;
+    background: #202d3c;
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
@@ -98,6 +100,7 @@ body {
     text-decoration: none;
     color: #fff;
     border-radius: 5px;
+    font-size: 0.8rem;
     transition: background 0.3s;
 }
 
@@ -110,6 +113,7 @@ body {
     font-size: 12rem;
     height: 16rem;
     margin-top: 30vh;
+    font-weight: 400;
 }
 
 .headingContainer p {
@@ -118,11 +122,22 @@ body {
 }
 
 .subHeading1 {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: baseline;
+}
+
+.maxroi{
+    margin-left: 8px;
     font-size: 1.5rem;
+    font-weight: 800;
+    font-style: italic;
+    font-weight: 800;
+    font-family: "Playfair Display", sans-serif;
 }
 
 .subHeading2 {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 .headingBtns {

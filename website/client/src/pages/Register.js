@@ -50,7 +50,7 @@ function Register() {
             });
 
             if (response.ok) {
-                window.location.href = '/login';
+                window.location.href = '/successPage';
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message || 'Registration failed. Please try again.');

@@ -17,7 +17,7 @@ function Success() {
             <div className={styles.body}>
                 <h1>Successfully</h1>
                 <Link to="/" className={styles.button}>
-                    Go to User Page
+                    Back to Home
                 </Link>
             </div>
         </div>
