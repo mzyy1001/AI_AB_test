@@ -1,0 +1,85 @@
+/* Dashboard.module.css */
+
+.pageContainer {
+    background-color: #ffffff;
+    color: #333;
+    font-family: 'Playfair Display', serif;
+    max-width: 100%;
+}
+
+/* Header Styles */
+.header {
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    position: absolute;
+    left: 4%;
+    top: 45px;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.arrow {
+    position: absolute;
+    top: 16%;
+    width: 70%;
+    height: 10%;
+    background-color: #5b5b5b;
+    animation: arrow 700ms linear infinite;
+    border-radius: 1px;
+}
+
+.arrow::after,
+.arrow::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    left: -9%;
+    background-color: #5b5b5b;
+}
+
+.arrow::after {
+    top: -133%;
+    transform: rotate(135deg);
+}
+
+.arrow::before {
+    top: 133%;
+    transform: rotate(45deg);
+}
+
+.grayDot {
+    width: 40px;
+    /* Larger size */
+    height: 40px;
+    /* Larger size */
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+/* Gray Cutoff Line */
+.cutoffLine {
+    height: 2px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+}
+
+.body {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    height: 100vh;
+}

@@ -9,6 +9,8 @@ import AdminLogin from './pages/AdminLogin';
 import RechargePage from './pages/ReChargePage';
 import SceneS from './pages/OneNebulaScene';
 import SuccessPage from './pages/Success';
+import ForgetPassword from './pages/ForgetPassword';
+import Dashboard from './pages/Dashboard';
 
 function App() {
 
@@ -24,6 +26,8 @@ function App() {
                 <Route path="/admin-login" element={<AdminLogin />} />
                 <Route path='/scene' element={<SceneS />} />
                 <Route path='/successPage' element={<SuccessPage />} />
+                <Route path='/forgetpassword' element={<ForgetPassword />} />
+                <Route path='/user/dashboard' element={<Dashboard />} />
             </Routes>
         </Router>
     );

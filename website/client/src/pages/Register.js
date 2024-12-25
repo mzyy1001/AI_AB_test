@@ -13,11 +13,10 @@ function Register() {
 
     const isNameValid = name.trim().length > 0; // Validate name
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Validate email
-    const isPasswordValid = password.length >= 0; // Validate password length (at least 6 characters)
+    const isPasswordValid = password.length > 0; // Validate password length (at least 6 characters)
     const navigate = useNavigate();
 
     const handleNextStep = () => {
-        // CHANGED: Validate email on step 1, and name on step 2
         if (currentStep === 1 && !isEmailValid) {
             setErrorMessage('Please enter a valid email.');
             setIsError(true);
@@ -46,36 +45,54 @@ function Register() {
             const response = await fetch('/users/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, name }),
+                body: JSON.stringify({
+                    email,
+                    password,
+                    name,
+                    firstName: null,
+                    lastName: null,
+                    company: null,
+                    jobTitle: null,
+                    phone: null,
+                    country: null,
+                    productsInterested: null
+                }),
             });
-
             if (response.ok) {
                 window.location.href = '/successPage';
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message || 'Registration failed. Please try again.');
-                setIsError(true); // Show error modal
+                setIsError(true);
             }
         } catch (error) {
             console.error('Error:', error);
             setErrorMessage('An unexpected error occurred. Please try again later.');
-            setIsError(true); // Show error modal
+            setIsError(true);
+        }
+    };
+
+    // Intercept the Enter key: move to next step if not on final step
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && currentStep < 3) {
+            e.preventDefault();
+            handleNextStep();
         }
     };
 
     const closeBanner = () => {
-        setFade(true); // Trigger the fade-out effect
-        setTimeout(() => setIsError(false), 1000); // Hide the banner after the fade-out duration
+        setFade(true);
+        setTimeout(() => setIsError(false), 1000);
     };
 
     useEffect(() => {
         if (isError) {
-            setFade(false); // Reset the fade effect when a new error occurs
+            setFade(false);
             const timer = setTimeout(() => {
-                setFade(true); // Trigger fade-out after 5 seconds automatically
-                setTimeout(() => setIsError(false), 1000); // Hide the banner after fade-out
+                setFade(true);
+                setTimeout(() => setIsError(false), 1000);
             }, 5000);
-            return () => clearTimeout(timer); // Cleanup timer on unmount
+            return () => clearTimeout(timer);
         }
     }, [isError]);
 
@@ -99,7 +116,6 @@ function Register() {
             </header>
             <div className={styles.cutoffLine}></div>
             <div className={styles.body}>
-                {/* Header */}
                 <header className={styles.headerTitle}>
                     <h1 className={styles.heading}>Create an account</h1>
                     <p className={styles.subtitle}>
@@ -107,7 +123,6 @@ function Register() {
                     </p>
                 </header>
 
-                {/* Step Tracker */}
                 <div className={styles.stepTracker}>
                     <div className={styles.stepItem}>
                         <span className={`${styles.step} ${currentStep === 1 ? styles.activeStep : ''}`}>1</span>
@@ -129,8 +144,8 @@ function Register() {
                     </div>
                 </div>
 
-                {/* Form Content */}
-                <form onSubmit={handleRegister} className={styles.form}>
+                {/* Apply onKeyDown to intercept Enter key */}
+                <form onSubmit={handleRegister} onKeyDown={handleKeyDown} className={styles.form}>
                     {currentStep === 1 && (
                         <div className={styles.inputContainer}>
                             <label className={styles.inputComment}>What's your email?</label>
@@ -171,16 +186,17 @@ function Register() {
                         </div>
                     )}
 
-                    {/* CHANGED: Removed Back button */}
                     <div className={styles.actions}>
                         {currentStep < 3 && (
                             <button
                                 type="button"
                                 onClick={handleNextStep}
-                                className={`${styles.buttonPrimary} ${(currentStep === 1 && !isEmailValid) ||
+                                className={`${styles.buttonPrimary} ${
+                                    (currentStep === 1 && !isEmailValid) ||
                                     (currentStep === 2 && !isNameValid)
-                                    ? styles.disabled
-                                    : ''}`}
+                                        ? styles.disabled
+                                        : ''
+                                }`}
                                 disabled={
                                     (currentStep === 1 && !isEmailValid) ||
                                     (currentStep === 2 && !isNameValid)
@@ -201,7 +217,6 @@ function Register() {
                     </div>
                 </form>
 
-                {/* Error Banner */}
                 {isError && (
                     <div className={`${styles.errorBanner} ${fade ? styles.fadeOut : ''}`}>
                         <div className={styles.errorContent}>
