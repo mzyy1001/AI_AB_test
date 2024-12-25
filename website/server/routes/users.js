@@ -11,8 +11,7 @@ const nodemailer = require('nodemailer');
 
 
 router.post('/register', (req, res) => {
-  const { email, password, name, firstName, lastName, company, jobTitle, phone, country, productsInterested } = req.body;
-
+  const { email, password, name } = req.body;
   db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -27,22 +26,13 @@ router.post('/register', (req, res) => {
         }
 
         bcrypt.hash(password, salt, (err, hash) => {
-          if (err) {
-            return res.status(500).json({ error: 'Error hashing password' });
-          }
-
-          const sql = `
-            INSERT INTO users 
-            (email, password, username, firstName, lastName, company, jobTitle, phone, country, productsInterested) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-          `;
-          const values = [email, hash, name, firstName || null, lastName || null, company || null, jobTitle || null, phone || null, country || null, productsInterested || null];
-
-          db.run(sql, values, (err) => {
-            if (err) {
-              return res.status(500).json({ error: err.message });
-            }
-            return res.status(201).json({ message: 'User registered successfully' });
+          db.run(
+            `INSERT INTO users (email, password, username) VALUES (?, ?, ?)`,
+            [email, hash, name],
+            (err) => {
+              if (err) {
+                return res.status(500).json({ error: err.message });
+              }
           });
         });
       });

@@ -49,13 +49,6 @@ db.serialize(() => {
     password TEXT,
     usageCount INTEGER DEFAULT 0,
     date TEXT DEFAULT (datetime('now')),
-    firstName TEXT,
-    lastName TEXT,
-    company TEXT,
-    jobTitle TEXT,
-    phone TEXT,
-    country TEXT,
-    productsInterested TEXT
   )`, (err) => {
     if (err) {
       console.error('Failed to create users table:', err.message);
@@ -75,6 +68,24 @@ db.serialize(() => {
     if (err) console.error('Failed to create surveys table:', err.message);
     else console.log('Surveys table ready');
   });
+});
+
+db.run(`CREATE TABLE IF NOT EXISTS contacts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date TEXT DEFAULT (datetime('now')),
+  firstName TEXT,
+  lastName TEXT,
+  company TEXT,
+  jobTitle TEXT,
+  phone TEXT,
+  country TEXT,
+  productsInterested TEXT
+)`, (err) => {
+  if (err) {
+    console.error('Failed to create contacts table:', err.message);
+  } else {
+    console.log('Contacts table ready');
+  }
 });
 
 db.serialize(() => {
