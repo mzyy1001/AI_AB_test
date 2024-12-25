@@ -72,42 +72,66 @@
     margin-bottom: 20px;
 }
 
-.body {
+.navBar {
+    margin-left: 7%;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.label {
+    border-left: 4px solid #202d3c;
+    padding-left: 10px;
+    border-radius: 2px;
+    font-size: 0.8rem;
+}
+
+.predictionPeriod {
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+}
+
+.predictionButton {
+    padding: 4px;
+    font-size: 0.7rem;
+    background-color: white;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+    border-radius: 7px;
+    width: 14%;
+    border: none;
+    cursor: pointer;
     font-family: 'Playfair Display', serif;
+}
+
+.selected {
+    font-family: 'Playfair Display', serif;
+    background-color: #202d3c;
+    color: white;
+}
+
+.body {
     margin: 0;
     padding: 0;
+    padding-left: 7%;
+    padding-right: 7%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to flex-start */
     background-color: #ffffff;
     height: 100vh;
+    gap: 25px;
+    flex-wrap: wrap; /* Prevents overflow on smaller screens */
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Allows columns to grow evenly */
+    gap: 20px;
+    min-width: 250px; /* Ensures columns don't get too narrow */
 }
 
 .row {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.col {
-    flex: 1;
-    min-width: 250px;
-}
-
-.predictionPeriod {
-    display: flex;
-    gap: 10px;
-}
-
-.predictionButton {
-    padding: 10px;
-    background-color: #f5f5f5;
-    border: none;
-    cursor: pointer;
-}
-
-.selected {
-    background-color: #007bff;
-    color: white;
 }

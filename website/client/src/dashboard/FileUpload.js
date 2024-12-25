@@ -28,11 +28,12 @@ const FileUpload = () => {
                     className={styles.fileInput}
                 />
                 <label htmlFor="fileInput" className={styles.dragArea}>
-                    Drag and drop files here or click to browse
+                    <span>Drag and drop files here or click to browse</span>
+
+                    <button onClick={handleFileUpload} className={styles.uploadButton}>
+                        Upload File
+                    </button>
                 </label>
-                <button onClick={handleFileUpload} className={styles.uploadButton}>
-                    Upload File
-                </button>
             </div>
             <div className={styles.urlSection}>
                 <input
@@ -52,13 +53,30 @@ const FileUpload = () => {
                 Submit Description
             </button>
 
-            <div className={styles.fileList}>
-                <div className={styles.fileRow}>
-                    <span className={styles.fileName}>example.mp4</span>
-                    <span className={styles.fileType}>File</span>
-                    <span className={styles.fileStatus}>Status</span>
-                    <span className={styles.fileDate}>2024/11/28</span>
-                </div>
+            <table className={styles.table}>
+              <thead>
+                <tr className={styles.tableHeader}>
+                  <th>ID</th>
+                  <th>File/URL Name</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Upload Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr className={styles.tableRow}>
+                    <td>1</td>
+                    <td>example.mp4</td>
+                    <td>File</td>
+                    <td>Pending</td>
+                    <td>2024/11/28</td>
+                  </tr>
+              </tbody>
+            </table>
+
+            <div className={styles.ops}>
+                <button className={styles.submitAllButton}>Submit All</button>
+                <button className={styles.clearAllButton}>Clear All</button>
             </div>
         </div>
     );

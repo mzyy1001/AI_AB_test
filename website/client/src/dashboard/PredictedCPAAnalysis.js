@@ -2,11 +2,12 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 import styles from '../css/Widget.module.css';
+import chartImg from '../public/predictedCPAAnalysis.png';
 
 const PredictedCPAAnalysis = () => {
     const data = {
         labels: [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
         ],
         datasets: [
@@ -30,12 +31,13 @@ const PredictedCPAAnalysis = () => {
     return (
         <div className={styles.widget}>
             <h2 className={styles.widgetTitle}>Predicted CPA Analysis</h2>
-            <p className={styles.widgetValue}>
-                $13.50 <span className={styles.trend}>↓ 24%</span> vs target ($17.80)
+            <p className={styles.widgetValue}>$13.50</p>
+            <p className={styles.widgetComment}>
+                <span className={styles.trend}>↓ 24%</span>
+                vs target ($17.80)
             </p>
-            <div className={styles.chart}>
-                <Line data={data} />
-            </div>
+            {/* <div className={styles.chart}><Line data={data} /></div> */}
+            <img src={chartImg} className={styles.chart} />
         </div>
     );
 };
