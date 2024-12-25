@@ -1,0 +1,117 @@
+/* FileUpload.module.css */
+
+/* Container for the file upload section */
+.fileUploadContainer {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Wrapper for file upload area */
+.fileUpload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Styling for the input file field */
+.fileInput {
+    display: none;
+}
+
+/* Style for drag-and-drop or clickable upload area */
+.dragArea {
+    width: 100%;
+    padding: 20px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    color: #777;
+    font-size: 1rem;
+}
+
+/* Styling for buttons */
+.uploadButton,
+.submitButton,
+.submitDescriptionButton {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.uploadButton:hover,
+.submitButton:hover,
+.submitDescriptionButton:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for the URL input field */
+.urlInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* Styling for the description input field */
+.descriptionInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 10px;
+    height: 100px;
+}
+
+/* File list section */
+.fileList {
+    margin-top: 30px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+.fileRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.fileRow:last-child {
+    border-bottom: none;
+}
+
+.fileName {
+    font-size: 1rem;
+    color: #333;
+}
+
+.fileType {
+    font-size: 0.875rem;
+    color: #777;
+}
+
+.fileStatus {
+    font-size: 0.875rem;
+    color: #777;
+}
+
+.fileDate {
+    font-size: 0.875rem;
+    color: #777;
+}
