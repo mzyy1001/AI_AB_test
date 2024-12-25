@@ -13,6 +13,7 @@ const db = require('./database/db'); // Import your database configuration
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const surveyRouter = require('./routes/survey');
+const contactRouter = require('./routes/contact');
 
 const app = express();
 
@@ -47,6 +48,7 @@ require('./config/passport')(passport); // Passport configuration
 app.use('/', indexRouter); // Root routes
 app.use('/survey', surveyRouter); // Survey routes
 app.use('/users', usersRouter); // User routes
+app.use('/contact', contactRouter); // User routes
 
 // Error handling middleware
 app.use((err, req, res, next) => {
