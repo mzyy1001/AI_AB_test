@@ -5,7 +5,6 @@ import logo from '../public/logo.png';
 import bg1 from '../public/home-BG1.png';
 import bg2 from '../public/home-BG2.png';
 
-
 function Home() {
     const [formData, setFormData] = useState({
         firstName: '',
@@ -18,12 +17,57 @@ function Home() {
         interests: ''
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
             [name]: value
         }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setErrorMessage('');
+
+        try {
+            const response = await fetch('/contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Handle success (e.g., show a success message or redirect)
+                console.log('Form submitted successfully:', result);
+                alert('Form submitted successfully!');
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    company: '',
+                    jobTitle: '',
+                    phone: '',
+                    country: '',
+                    interests: ''
+                });
+            } else {
+                // Handle errors
+                setErrorMessage(result.error || 'Something went wrong, please try again.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setErrorMessage('Error submitting the form. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const isAnyInputFilled = Object.values(formData).some(value => value.trim() !== '');
@@ -64,14 +108,14 @@ function Home() {
                 <div className={styles.contactformContainer}>
                     <h1 className={styles.title}>Get in Touch</h1>
                     <h3 className={styles.subtitle}>
-                        Achieve unparallelled market insights using more than 1.5 million AI data agents.
+                        Achieve unparalleled market insights using more than 1.5 million AI data agents.
                     </h3>
                     <ul className={styles.formList}>
                         <li>User behavior modeling based on millions of self-growing AI data agents, enabling cost-effective and precise A/B testing and data-driven decision support.</li>
                         <li>Costs only 1/600th of any alternative with the same data size.</li>
                         <li>Save 99.983% while making top-tier data-driven decisions.</li>
                     </ul>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className={styles.formRow}>
                             <div className={styles.formgroup}>
                                 <label htmlFor="first-name">First Name</label>
@@ -172,45 +216,12 @@ function Home() {
                             ></textarea>
                         </div>
                         {isAnyInputFilled && (
-                            <button type="submit" className={styles.btn}>Submit</button>
+                            <button type="submit" className={styles.btn} disabled={isSubmitting}>
+                                {isSubmitting ? 'Submitting...' : 'Submit'}
+                            </button>
                         )}
                     </form>
-                </div>
-            </section>
-
-            <section className={styles.productIntro}>
-                <h2>Real-time, Precise, and Transparent</h2>
-                <h4 className={styles.smallGraySubtitle}>explainable AI only</h4>
-                <h3 className={styles.largerDarkerSubtitle}>Introduction the first 'alive' data company</h3>
-                <div className={styles.productIntroGrid}>
-                    <div className={styles.productIntroItem}>
-                        <h4 className={styles.productIntroTitle}>Production</h4>
-                        <h5 className={styles.productIntroSubtitle}>Ideation and Development</h5>
-                        <p className={styles.productIntroDesc}>
-                            Transforming innovative ideas into market-ready products through meticulous planning and execution.
-                        </p>
-                    </div>
-                    <div className={styles.productIntroItem}>
-                        <h4 className={styles.productIntroTitle}>Market</h4>
-                        <h5 className={styles.productIntroSubtitle}>Targeting Niches</h5>
-                        <p className={styles.productIntroDesc}>
-                            Identifying and focusing on specifc market segments to maximize reach and impact.
-                        </p>
-                    </div>
-                    <div className={styles.productIntroItem}>
-                        <h4 className={styles.productIntroTitle}>Precise</h4>
-                        <h5 className={styles.productIntroSubtitle}>Product Pricing</h5>
-                        <p className={styles.productIntroDesc}>
-                            Implement data-driven pricing strategies to ensure competitiveness and profitability.
-                        </p>
-                    </div>
-                    <div className={styles.productIntroItem}>
-                        <h4 className={styles.productIntroTitle}>Strategy</h4>
-                        <h5 className={styles.productIntroSubtitle}>Development</h5>
-                        <p className={styles.productIntroDesc}>
-                            Crafting tailored marketing plans that align with your business goals and target audience.
-                        </p>
-                    </div>
+                    {errorMessage && <p className={styles.error}>{errorMessage}</p>}
                 </div>
             </section>
 
@@ -218,7 +229,6 @@ function Home() {
                 <p>&copy; 2024 Fifteen. All rights reserved.</p>
             </footer>
         </body>
-
     );
 }
 

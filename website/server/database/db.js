@@ -75,6 +75,7 @@ db.run(`CREATE TABLE IF NOT EXISTS contacts (
   date TEXT DEFAULT (datetime('now')),
   firstName TEXT,
   lastName TEXT,
+  workEmail TEXT,
   company TEXT,
   jobTitle TEXT,
   phone TEXT,
