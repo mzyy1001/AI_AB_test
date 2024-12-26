@@ -16,6 +16,30 @@
     justify-content: center;
 }
 
+.navLinks {
+    position: absolute;
+    right: 25px;
+}
+
+.navLinks a {
+    margin-left: 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+    border: none;
+    color: #202d3c;
+}
+
+.navbtn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
+}
+
+.navbtn:hover {
+    background: #f0f0f0;
+}
+
 .icon {
     position: absolute;
     left: 4%;
@@ -54,15 +78,6 @@
 .arrow::before {
     top: 133%;
     transform: rotate(45deg);
-}
-
-.grayDot {
-    width: 40px;
-    /* Larger size */
-    height: 40px;
-    /* Larger size */
-    background-color: #ccc;
-    border-radius: 50%;
 }
 
 /* Gray Cutoff Line */

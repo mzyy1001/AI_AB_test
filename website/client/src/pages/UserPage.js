@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../css/UserPage.module.css';
+import logo from '../public/logo.png';
 
 function UserPage() {
   const [file, setFile] = useState(null);
@@ -47,7 +48,9 @@ function UserPage() {
     const token = localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = token;
     e.preventDefault();
-    if (usageCount <= 0) {
+    
+    //PLEASE CHANGE AFTERWARDS. USEAGE COUNT IS DISABLED.
+    if (false /* usageCount <= 0 */) {
       alert('You have no remaining usage count. Please recharge.');
       return;
     }
@@ -78,14 +81,16 @@ function UserPage() {
     const token = localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = token;
     e.preventDefault();
-    if (usageCount <= 0) {
+    
+    //PLEASE CHANGE AFTERWARDS. USEAGE COUNT IS DISABLED.
+    if (false /* usageCount <= 0 */) {
       alert('You have no remaining usage count. Please recharge.');
       return;
     }
 
     try {
       const response = await axios.post('/upload-url', { url });
-      alert(response.data.message || 'URL uploaded successfully!');
+      // alert(response.data.message || 'URL uploaded successfully!');
       fetchHistory();
       fetchUsageCount();
     } catch (error) {
@@ -101,7 +106,18 @@ function UserPage() {
         <div className={styles.icon}>
           <Link to="/" className={styles.arrow}></Link>
         </div>
-        <span className={styles.grayDot}></span>
+        <div className={styles.logo} >
+          <img src={logo} alt="Logo" style={{
+            height: "40px",
+            width: "75px",
+            display: "block",
+          }} />
+        </div>
+
+        <div className={styles.navLinks}>
+          <a href="/user/dashboard" className={styles.navbtn}>Dashboard</a>
+          <a href="/user/abtest" className={styles.navbtn}>AB Testing</a>
+        </div>
       </header>
       <div className={styles.cutoffLine}></div>
 
@@ -115,7 +131,7 @@ function UserPage() {
               <button type="submit" className={styles.uploadButton}>Upload File</button>
             </label>
             {progress > 0 && <div className={styles.progressBar} style={{ width: `${progress}%` }}></div>}
-            
+
           </form>
 
           <form onSubmit={handleUrlUpload} className={styles.uploadForm}>

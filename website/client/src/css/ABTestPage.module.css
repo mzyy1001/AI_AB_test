@@ -1,0 +1,311 @@
+/* ABTestPage.module.css */
+
+.pageContainer {
+    background-color: #ffffff;
+    color: #202d3c;
+    font-family: 'Playfair Display', serif;
+    max-width: 100%;
+}
+
+/* Header Styles */
+.header {
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    position: absolute;
+    left: 4%;
+    top: 45px;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.arrow {
+    position: absolute;
+    top: 16%;
+    width: 70%;
+    height: 10%;
+    background-color: #5b5b5b;
+    animation: arrow 700ms linear infinite;
+    border-radius: 1px;
+}
+
+.arrow::after,
+.arrow::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 100%;
+    left: -9%;
+    background-color: #5b5b5b;
+}
+
+.arrow::after {
+    top: -133%;
+    transform: rotate(135deg);
+}
+
+.arrow::before {
+    top: 133%;
+    transform: rotate(45deg);
+}
+
+.navLinks {
+    position: absolute;
+    right: 25px;
+}
+
+.navLinks a {
+    margin-left: 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+    border: none;
+    color: #202d3c;
+}
+
+.navbtn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
+}
+
+.navbtn:hover {
+    background: #f0f0f0;
+}
+
+/* Gray Cutoff Line */
+.cutoffLine {
+    height: 2px;
+    background-color: #ccc;
+    margin-bottom: 20px;
+}
+
+.body {
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+    padding-left: 7%;
+    padding-right: 7%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #ffffff;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.FileUpload {
+    max-width: 35%;
+    margin-top: 45px;
+}
+
+.chartSection {
+    max-width: 50%;
+}
+
+/* Container for the file upload section */
+.fileUploadContainer {
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    padding-bottom: 0;
+    font-weight: 800;
+}
+
+/* Wrapper for file upload area */
+.fileUpload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Styling for the input file field */
+.fileInput {
+    display: none;
+}
+
+/* Style for drag-and-drop or clickable upload area */
+.dragArea {
+    width: 100%;
+    padding: 20px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #0000000a;
+    color: #777;
+    font-size: 1rem;
+}
+
+.dragArea span{
+    padding: 10px;
+}
+
+/* Styling for buttons */
+.uploadButton,
+.submitURLButton,
+.submitDescriptionButton,
+.submitAllButton,
+.clearAllButton {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #202d3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    width: 100%;
+    font-family: 'Playfair Display', serif;
+    text-transform: uppercase;
+}
+
+.uploadButton:hover,
+.submitURLButton:hover,
+.submitDescriptionButton:hover,
+.submitAllButton:hover,
+.clearAllButton:hover,
+.submitButton:hover {
+    background-color: #202d3c9a;
+}
+
+.urlSection {
+    display: flex;
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+.submitURLButton {
+    padding: 5px 20px;
+}
+
+/* Styling for the URL input field */
+.urlInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Styling for the description input field */
+.descriptionInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    height: 100px;
+    font-family: 'Playfair Display', serif;
+    resize: vertical; 
+}
+
+/* File list section */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.7rem;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.table tr{
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.table td {
+    padding: 5px;
+    color: rgb(0, 0, 0);
+}
+
+.table th {
+    padding: 5px;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 800;
+    text-transform: uppercase;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+.checkbox {
+    margin-top: 5px;
+    border: #202d3c;
+}
+
+.checkbox:checked {
+    background: #202d3c;
+}
+
+.submitButton,
+.clearButton {
+    width: 45px;
+    border-radius: 3px;
+    border: 0;
+    padding: 3px;
+    font-size: 0.6rem;
+}
+
+.submitButton {
+    border-radius: 3px;
+    background-color: #202d3c;
+    color: white;
+    margin-right: 5px;
+}
+
+.clearButton {
+    background-color: #00000020;
+}
+
+.clearButton:hover {
+    background-color: #00000018;
+}
+
+.ops {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.submitAllButton {
+    text-transform: none;
+    padding: 7px 20px;
+}
+
+.clearAllButton {   
+    padding: 7px 20px;
+    text-transform: none;
+    background-color: white;
+    color: #202d3c;
+    border: 2px solid #202d3c;
+}
+
+.clearAllButton:hover {
+    background-color: #00000010;
+}    
+
+.chartLabel {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.chart {
+    margin-top: 15px;
+    width: 100%;
+    height: auto;
+    border: 1px solid #00000050;
+}

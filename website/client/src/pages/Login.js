@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from '../css/Login.module.css';
 import showPasswordIcon from '../public/show-password.png';
 import hidePasswordIcon from '../public/hide-password.png';
+import logo from '../public/logo.png';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -22,7 +23,7 @@ function Login() {
                 password,
             });
             localStorage.setItem('token', response.data.token);
-            window.location.href = '/user';
+            window.location.href = '/user/dashboard';
         } catch (error) {
             console.error('Login failed:', error.response?.data);
             setErrorMessage('Login failed. Please try again later.');
@@ -53,7 +54,13 @@ function Login() {
                 <div className={styles.icon}>
                     <Link to="/" className={styles.arrow}></Link>
                 </div>
-                <span className={styles.grayDot}></span>
+                <div className={styles.logo} >
+                    <img src={logo} alt="Logo" style={{
+                        height: "40px",
+                        width: "75px",
+                        display: "block",
+                    }} />
+                </div>
             </header>
             <div className={styles.cutoffLine}></div>
 

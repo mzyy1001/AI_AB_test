@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../css/Home.module.css';
 import logo from '../public/logo.png';
@@ -18,7 +19,37 @@ function Home() {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [verificationLink, setVerificationLink] = useState('/login');
+    const [abtestLink, setAbtestLink] = useState('/login');
+    const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [fade, setFade] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        axios.defaults.headers.common['Authorization'] = token;
+        if (token) {
+            setVerificationLink('/user/dashboard');
+            setAbtestLink('/user/abtest');
+        } else {
+            setVerificationLink('/login');
+            setAbtestLink('/login');
+        }
+
+        if (isError) {
+            setFade(false); // Reset the fade effect when a new error occurs
+            const timer = setTimeout(() => {
+                setFade(true); // Trigger fade-out after 5 seconds automatically
+                setTimeout(() => setIsError(false), 1000); // Hide the banner after fade-out
+            }, 5000);
+            return () => clearTimeout(timer); // Cleanup timer on unmount
+        }
+    }, [isError]);
+
+    const closeBanner = () => {
+        setFade(true); // Trigger the fade-out effect
+        setTimeout(() => setIsError(false), 1000); // Hide the banner after the fade-out duration
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -34,7 +65,7 @@ function Home() {
         setErrorMessage('');
 
         try {
-            const response = await fetch('/contacts', {
+            const response = await fetch('/contact/contacts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +78,7 @@ function Home() {
             if (response.ok) {
                 // Handle success (e.g., show a success message or redirect)
                 console.log('Form submitted successfully:', result);
-                alert('Form submitted successfully!');
+                alert('Form submission success!');
                 setFormData({
                     firstName: '',
                     lastName: '',
@@ -58,13 +89,17 @@ function Home() {
                     country: '',
                     interests: ''
                 });
+
+                window.location.href = '/';
             } else {
                 // Handle errors
                 setErrorMessage(result.error || 'Something went wrong, please try again.');
+                setIsError(true); // Show error modal
             }
         } catch (error) {
             console.error('Error submitting form:', error);
             setErrorMessage('Error submitting the form. Please try again.');
+            setIsError(true); // Show error modal
         } finally {
             setIsSubmitting(false);
         }
@@ -88,13 +123,19 @@ function Home() {
                 <div className={styles.headingContainer}>
                     <h1 className={styles.mainHeading}>Fifteen.</h1>
                     <p className={styles.subHeading1}>
-                        <p>Advertising placement strategy real-time testing for</p> 
+                        <p>Advertising placement strategy real-time testing for</p>
                         <p className={styles.maxroi}>MAX ROI</p>
                     </p>
-                    <p className={styles.subHeading2}>Million+ Al agent market mirroring | Unstructured living data</p>
+                    <p className={styles.subHeading2}>
+                        Million+ Al agent market mirroring | Unstructured living data
+                    </p>
                     <div className={styles.headingBtns}>
-                        <a href="/" className={styles.headingBtn}>STRATEGY VERIFICATION</a>
-                        <a href="/" className={styles.headingBtn}>A/B/n TESTING</a>
+                        <a href={verificationLink} className={styles.headingBtn}>
+                            STRATEGY VERIFICATION
+                        </a>
+                        <a href={abtestLink} className={styles.headingBtn}>
+                            A/B/n TESTING
+                        </a>
                     </div>
                 </div>
             </section>
@@ -221,7 +262,53 @@ function Home() {
                             </button>
                         )}
                     </form>
-                    {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+
+                    {isError && (
+                        <div className={`${styles.errorBanner} ${fade ? styles.fadeOut : ''}`}>
+                            <div className={styles.errorContent}>
+                                <p className={styles.errorMessage}>{errorMessage}</p>
+                                <button onClick={closeBanner} className={styles.closeButton}>
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+            <section className={styles.productIntro}>
+                <h2>Real-time, Precise, and Transparent</h2>
+                <h4 className={styles.smallGraySubtitle}>explainable AI only</h4>
+                <h3 className={styles.largerDarkerSubtitle}>Introduction the first 'alive' data company</h3>
+                <div className={styles.productIntroGrid}>
+                    <div className={styles.productIntroItem}>
+                        <h4 className={styles.productIntroTitle}>Production</h4>
+                        <h5 className={styles.productIntroSubtitle}>Ideation and Development</h5>
+                        <p className={styles.productIntroDesc}>
+                            Transforming innovative ideas into market-ready products through meticulous planning and execution.
+                        </p>
+                    </div>
+                    <div className={styles.productIntroItem}>
+                        <h4 className={styles.productIntroTitle}>Market</h4>
+                        <h5 className={styles.productIntroSubtitle}>Targeting Niches</h5>
+                        <p className={styles.productIntroDesc}>
+                            Identifying and focusing on specifc market segments to maximize reach and impact.
+                        </p>
+                    </div>
+                    <div className={styles.productIntroItem}>
+                        <h4 className={styles.productIntroTitle}>Precise</h4>
+                        <h5 className={styles.productIntroSubtitle}>Product Pricing</h5>
+                        <p className={styles.productIntroDesc}>
+                            Implement data-driven pricing strategies to ensure competitiveness and profitability.
+                        </p>
+                    </div>
+                    <div className={styles.productIntroItem}>
+                        <h4 className={styles.productIntroTitle}>Strategy</h4>
+                        <h5 className={styles.productIntroSubtitle}>Development</h5>
+                        <p className={styles.productIntroDesc}>
+                            Crafting tailored marketing plans that align with your business goals and target audience.
+                        </p>
+                    </div>
                 </div>
             </section>
 

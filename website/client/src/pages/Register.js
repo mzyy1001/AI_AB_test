@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../css/Register.module.css';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../public/logo.png';
 
 function Register() {
     const [currentStep, setCurrentStep] = useState(1); // State to track the current step
@@ -48,18 +49,12 @@ function Register() {
                 body: JSON.stringify({
                     email,
                     password,
-                    name,
-                    firstName: null,
-                    lastName: null,
-                    company: null,
-                    jobTitle: null,
-                    phone: null,
-                    country: null,
-                    productsInterested: null
+                    name
                 }),
             });
+            
             if (response.ok) {
-                window.location.href = '/successPage';
+                window.location.href = '/login';
             } else {
                 const errorData = await response.json();
                 setErrorMessage(errorData.message || 'Registration failed. Please try again.');
@@ -112,7 +107,13 @@ function Register() {
                 >
                     <Link className={styles.arrow}></Link>
                 </div>
-                <span className={styles.grayDot}></span>
+                <div className={styles.logo} >
+                    <img src={logo} alt="Logo" style={{
+                        height: "40px",
+                        width: "75px",
+                        display: "block",
+                    }} />
+                </div>
             </header>
             <div className={styles.cutoffLine}></div>
             <div className={styles.body}>
@@ -191,12 +192,11 @@ function Register() {
                             <button
                                 type="button"
                                 onClick={handleNextStep}
-                                className={`${styles.buttonPrimary} ${
-                                    (currentStep === 1 && !isEmailValid) ||
-                                    (currentStep === 2 && !isNameValid)
+                                className={`${styles.buttonPrimary} ${(currentStep === 1 && !isEmailValid) ||
+                                        (currentStep === 2 && !isNameValid)
                                         ? styles.disabled
                                         : ''
-                                }`}
+                                    }`}
                                 disabled={
                                     (currentStep === 1 && !isEmailValid) ||
                                     (currentStep === 2 && !isNameValid)

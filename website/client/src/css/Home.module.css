@@ -333,3 +333,43 @@ footer {
     position: relative;
     z-index: 1;
 }
+
+.errorBanner {
+    position: fixed;
+    top: 40px;
+    left: 10%;
+    width: 80%;
+    background-color: rgba(255, 81, 81, 0.514);
+    border-radius: 5px;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 18px;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.errorBanner.fadeOut {
+    opacity: 0;
+}
+
+.errorContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.errorMessage {
+    margin: 0;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}

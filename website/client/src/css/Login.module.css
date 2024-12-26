@@ -58,15 +58,6 @@
     transform: rotate(45deg);
 }
 
-.grayDot {
-    width: 40px;
-    /* Larger size */
-    height: 40px;
-    /* Larger size */
-    background-color: #ccc;
-    border-radius: 50%;
-}
-
 /* Gray Cutoff Line */
 .cutoffLine {
     height: 2px;
@@ -82,7 +73,6 @@
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    height: 100vh;
     width: 38%;
 }
 

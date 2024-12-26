@@ -25,7 +25,7 @@ router.get('/contacts', (req, res) => {
 // POST route to add a new contact
 router.post('/contacts', (req, res) => {
     const { firstName, lastName, workEmail, company, jobTitle, phone, country, productsInterested } = req.body;
-    const sql = 'INSERT INTO contacts (firstName, lastName, workEmail, company, jobTitle, phone, country, productsInterested) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO contacts (firstName, lastName, workEmail, company, jobTitle, phone, country, productsInterested) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const params = [firstName, lastName, workEmail, company, jobTitle, phone, country, productsInterested];
 
     db.run(sql, params, function (err) {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../css/Success.module.css';
+import logo from '../public/logo.png';
 
 function Success() {
     return (
@@ -10,7 +11,13 @@ function Success() {
                 <div className={styles.icon}>
                     <Link to="/" className={styles.arrow}></Link>
                 </div>
-                <span className={styles.grayDot}></span>
+                <div className={styles.logo} >
+                    <img src={logo} alt="Logo" style={{
+                        height: "40px",
+                        width: "75px",
+                        display: "block",
+                    }} />
+                </div>
             </header>
             <div className={styles.cutoffLine}></div>
 
