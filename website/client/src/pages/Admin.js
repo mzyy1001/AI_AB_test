@@ -28,7 +28,7 @@ function Admin() {
 
   const fetchUploads = async () => {
     try {
-      const response = await axios.get('/uploads');
+      const response = await axios.get('/api/uploads');
       setUploads(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -41,7 +41,7 @@ function Admin() {
 
   const fetchSurveys = async () => {
     try {
-      const response = await axios.get('/survey');
+      const response = await axios.get('/api/survey');
       setSurveys(response.data);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -54,7 +54,7 @@ function Admin() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('/users/getUsers');
+      const response = await axios.get('/api/users/getUsers');
       if (Array.isArray(response.data)) {
         setUsers(response.data);
       } else {
@@ -73,7 +73,7 @@ function Admin() {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.put(`/uploads/${id}`, { status });
+      await axios.put(`/api/uploads/${id}`, { status });
       alert('Status updated successfully');
       fetchUploads();
     } catch (error) {
@@ -98,7 +98,7 @@ function Admin() {
 
   const updateUsageCount = async (userId, usageCount) => {
     try {
-      await axios.post('/users/updateUsageCount', { userId, usageCount });
+      await axios.post('/api/users/updateUsageCount', { userId, usageCount });
       alert('Usage count updated successfully');
       fetchUsers();
     } catch (error) {

@@ -33,6 +33,7 @@ router.post('/register', (req, res) => {
               if (err) {
                 return res.status(500).json({ error: err.message });
               }
+              return res.status(201).json({ message: 'User registered successfully', userId: this.lastID });
           });
         });
       });

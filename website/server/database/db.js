@@ -48,7 +48,7 @@ db.serialize(() => {
     username TEXT,
     password TEXT,
     usageCount INTEGER DEFAULT 0,
-    date TEXT DEFAULT (datetime('now')),
+    date TEXT DEFAULT (datetime('now'))
   )`, (err) => {
     if (err) {
       console.error('Failed to create users table:', err.message);

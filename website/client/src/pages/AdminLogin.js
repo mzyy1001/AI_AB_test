@@ -10,7 +10,7 @@ function AdminLogin() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/admin/login', { username, password });
+            const response = await axios.post('/api/admin/login', { username, password });
             const token = response.data.token;
             localStorage.setItem('adminToken', token);
             window.location.href = '/admin';

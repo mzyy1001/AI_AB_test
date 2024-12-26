@@ -9,7 +9,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 
 // Submit survey
-router.post('/submitSurvey', passport.authenticate('user-strategy', { session: false }), (req, res) => {
+router.post('/api/submitSurvey', passport.authenticate('user-strategy', { session: false }), (req, res) => {
     const { companyName, contactInfo } = req.body;
   
     if (!req.user) {
@@ -38,7 +38,7 @@ router.post('/submitSurvey', passport.authenticate('user-strategy', { session: f
   });
   
   // Get all surveys 
-  router.get('/surveys', passport.authenticate('admin-strategy', { session: false }), (req, res) => {
+  router.get('/api/surveys', passport.authenticate('admin-strategy', { session: false }), (req, res) => {
     console.log('getsurveys reached');
     db.all('SELECT * FROM surveys', [], (err, rows) => {
       if (err) {

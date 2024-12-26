@@ -20,7 +20,7 @@ function UserPage() {
 
   const fetchHistory = async () => {
     try {
-      const response = await axios.get('/history');
+      const response = await axios.get('/api/history');
       setHistory(response.data);
     } catch (error) {
       console.error('Failed to fetch history:', error);
@@ -29,7 +29,7 @@ function UserPage() {
 
   const fetchUsageCount = async () => {
     try {
-      const response = await axios.get('/users/usageCount');
+      const response = await axios.get('/api/users/usageCount');
       setUsageCount(response.data.usageCount);
     } catch (error) {
       console.error('Failed to fetch usage count:', error);
@@ -59,7 +59,7 @@ function UserPage() {
     formData.append('video', file);
 
     try {
-      const response = await axios.post('/upload', formData, {
+      const response = await axios.post('/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -89,7 +89,7 @@ function UserPage() {
     }
 
     try {
-      const response = await axios.post('/upload-url', { url });
+      const response = await axios.post('/api/upload-url', { url });
       // alert(response.data.message || 'URL uploaded successfully!');
       fetchHistory();
       fetchUsageCount();

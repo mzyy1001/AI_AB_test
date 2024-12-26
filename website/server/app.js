@@ -45,10 +45,10 @@ require('./config/passport')(passport); // Passport configuration
 // });
 
 // Route configurations
-app.use('/', indexRouter); // Root routes
-app.use('/survey', surveyRouter); // Survey routes
-app.use('/users', usersRouter); // User routes
-app.use('/contact', contactRouter); // User routes
+app.use('/api', indexRouter); // Root routes
+app.use('/api/survey', surveyRouter); // Survey routes
+app.use('/api/users', usersRouter); // User routes
+app.use('/api/contact', contactRouter); // User routes
 
 // Error handling middleware
 app.use((err, req, res, next) => {

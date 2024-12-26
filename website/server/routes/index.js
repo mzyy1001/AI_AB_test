@@ -8,7 +8,7 @@ const db = require('../database/db');
 const jwt = require('jsonwebtoken');
 
 /*check payment*/
-router.get('/surveys', (req, res) => {
+router.get('/api/surveys', (req, res) => {
     db.all('SELECT * FROM surveys', [], (err, rows) => {
       if (err) {
         console.error('Failed to fetch surveys:', err.message);
@@ -19,7 +19,7 @@ router.get('/surveys', (req, res) => {
   });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/api/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
@@ -43,7 +43,7 @@ const adminCredentials = {
     password: 'admin', // Replace with a secure password
 };
 
-router.post('/admin/login', (req, res) => {
+router.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
   
     if (username === adminCredentials.username && password === adminCredentials.password) {
@@ -58,7 +58,7 @@ router.post('/admin/login', (req, res) => {
 
 const passport = require('passport');
 
-router.post('/upload', passport.authenticate('user-strategy', { session: false }), upload.single('video'), (req, res) => {
+router.post('/api/upload', passport.authenticate('user-strategy', { session: false }), upload.single('video'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
@@ -96,7 +96,7 @@ router.post('/upload', passport.authenticate('user-strategy', { session: false }
 });
 
 
-router.post('/upload-url', passport.authenticate('user-strategy', { session: false }), (req, res) => {
+router.post('/api/upload-url', passport.authenticate('user-strategy', { session: false }), (req, res) => {
   const { url } = req.body;
   const userId = req.user.id;
 
@@ -152,7 +152,7 @@ router.put('/uploads/:id', (req, res) => {
     });
 });
 
-router.post('/uploads/:id/report', upload.single('report'), (req, res) => {
+router.post('/api/uploads/:id/report', upload.single('report'), (req, res) => {
     const { id } = req.params;
     const { file } = req;
 
@@ -171,7 +171,7 @@ router.post('/uploads/:id/report', upload.single('report'), (req, res) => {
     });
 });
 
-router.get('/uploads', (req, res) => {
+router.get('/api/uploads', (req, res) => {
   const query = `
       SELECT id, filename, filepath, mimetype, size, uploadDate, 'File' AS type, status
       FROM files
@@ -188,7 +188,7 @@ router.get('/uploads', (req, res) => {
       res.json(rows);
   });
 });
-router.get('/history', passport.authenticate('user-strategy', { session: false }), (req, res) => {
+router.get('/api/history', passport.authenticate('user-strategy', { session: false }), (req, res) => {
   const userId = req.user.id;
   const query = `
       SELECT id, filename, reportPath, status, uploadDate, updateDate, 'File' AS type

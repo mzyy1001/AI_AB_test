@@ -65,7 +65,7 @@ function Home() {
         setErrorMessage('');
 
         try {
-            const response = await fetch('/contact/contacts', {
+            const response = await fetch('/api/contact/contacts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
